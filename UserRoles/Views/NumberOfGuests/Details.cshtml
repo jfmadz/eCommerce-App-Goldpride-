@@ -1,0 +1,27 @@
+﻿@model UserRoles.Models.NumberOfGuests
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>NumberOfGuests</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfPeople)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfPeople)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Key }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

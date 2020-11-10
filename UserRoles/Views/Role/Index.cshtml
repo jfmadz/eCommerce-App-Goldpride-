@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>Available Roles For Application</h2>
+<section class="col-sm-6">
+    <table class="table-bordered">
+        @Html.ActionLink("Create Role", "Create", "Role")
+    </table>
+
+</section>
+<section class="col-sm-6">
+    <table class="table-bordered">
+        @Html.ActionLink("Assign Role To User", "RegisterRole", "Account")
+    </table>
+
+</section>
+
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th class="c">
+            Role Name
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="c">
+                @item.Name
+            </td>
+        </tr>
+    }
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+

@@ -1,0 +1,78 @@
+﻿@model UserRoles.Models.Decor
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<h2>Details</h2>
+
+<div>
+    <h4>Decor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Category_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Category_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DecorName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DecorName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImageType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DecorCode }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

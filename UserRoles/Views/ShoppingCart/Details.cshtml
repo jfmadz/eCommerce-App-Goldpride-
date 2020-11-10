@@ -1,0 +1,32 @@
+﻿@model UserRoles.Models.ItemsHire
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Product Detail </h2>
+<div class="product-detail">
+    <div class="product-image">
+        @try
+        {
+
+            var base64 = Convert.ToBase64String(Model.Image);
+            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+            <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+        }
+        catch
+        {
+            if (Model.Image == null)
+            {
+                <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+            }
+        }
+    </div>
+    <div class="product-detail-content">
+        <p>Product Name: @Model.ProductName</p>
+        <p>Product price:@Model.Price.ToString("C")</p>
+        <p>@Html.ActionLink("Add to Cart", "OrderNow", "ShoppingCart", new { id = Model.ProductID },null)</p>
+    </div>
+</div>
+

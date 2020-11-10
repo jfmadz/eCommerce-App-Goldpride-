@@ -1,0 +1,17 @@
+﻿@model IEnumerable<UserRoles.Models.ProductType>
+    <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<ul id="categories">
+        @foreach (var productType in Model)
+        {
+            <li>
+                @Html.ActionLink(productType.ProductCategory_Name,
+                "ItemsInventory", "ItemsHires",
+                new { Genre = productType.ProductCategory_Name }, null)
+        </li>
+    }
+    </ul>

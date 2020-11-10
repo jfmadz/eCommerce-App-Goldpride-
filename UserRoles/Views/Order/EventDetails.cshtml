@@ -1,0 +1,177 @@
+﻿@model UserRoles.Models.BookEvent
+
+@{
+    ViewBag.Title = "EventDetails";
+
+}
+@if (Request.IsAuthenticated && !User.IsInRole("Admin") || !User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Request.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>EventDetails</h2>
+
+<div>
+    <h4>BookEvent</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Location.Area)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location.Area)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cell)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cell)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Setup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Setup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+    </dl>
+</div>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Sub Total</th>
+    </tr>
+    @foreach (var item in Model.EventOrderDetails)
+    {
+        <tr>
+            <td>@item.Package.packageName</td>
+
+            <td>@item.Package.Price.ToString("C")</td>
+            <td>@item.Quantity</td>
+            <td>@(( item.Quantity * item.Price).ToString("C"))</td>
+        </tr>
+
+        <tr>
+            <td colspan="3">Deposit:</td>
+            <td>
+
+                @item.Deposit.ToString("C")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">Total:</td>
+            <td>
+
+                @item.Total.ToString("C")
+            </td>
+        </tr>
+
+
+
+        @*<tr>
+                <td>@item.ItemsHire.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Total.ToString("C")</td>
+                <td>@item.Deposit.ToString("C")</td>
+
+
+            </tr>*@
+    }
+</table>
+<p>
+    @*@Html.ActionLink("Edit", "EventEdit", new { id = Model.ID }) |*@
+    @Html.ActionLink("Back to List", "UpComingEvents")
+    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "EventEdit", new { id = Model.ID })
+
+
+        <br />
+        @Html.ActionLink("Back to List", "Index")
+
+    } |
+
+    @if (Request.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Driver"))
+    {
+        @Html.ActionLink("Back to List", "CusEvents")
+    }
+</p>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

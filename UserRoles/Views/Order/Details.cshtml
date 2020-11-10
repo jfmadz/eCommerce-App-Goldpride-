@@ -1,0 +1,144 @@
+﻿@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Order Details</h2>
+@*<p>@Html.ActionLink("Export Order Listing", "ExportingOrderListing")</p>
+<p>@Html.ActionLink("Export Order", "DetailsReport")</p>*@
+<div>
+    <h4>Order: @Html.DisplayFor(model => model.OrderID) </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PickUp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickUp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CollDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CollDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualReturnDate)
+        </dd>
+
+    </dl>
+</div>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Sub Total</th>
+    </tr>
+    @foreach (var item in Model.OrderDetail)
+    {
+        <tr>
+            <td>@item.ItemsHire.ProductName</td>
+
+            <td>@item.ItemsHire.Price.ToString("C")</td>
+            <td>@item.Quantity</td>
+            <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
+        </tr>
+
+        <tr>
+            <td colspan="3">Deposit:</td>
+            <td>
+
+                @item.Deposit.ToString("C")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">Total:</td>
+            <td>
+
+                @item.Total.ToString("C")
+            </td>
+        </tr>
+
+
+
+        @*<tr>
+                <td>@item.ItemsHire.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Total.ToString("C")</td>
+                <td>@item.Deposit.ToString("C")</td>
+
+
+            </tr>*@
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

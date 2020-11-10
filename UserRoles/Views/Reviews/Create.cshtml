@@ -1,0 +1,67 @@
+﻿@model UserRoles.Models.Review
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h1>Please Review Event</h1>
+    <hr />
+
+    <div @*style="background-color:lightgray;padding-right:50%"*@ >
+        <div style="padding-left:8%">
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(model => model.Rating, "Excellent")
+                    <label>Excellent</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(model => model.Rating, "Good")
+                    <label>Good</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.RadioButtonFor(model => model.Rating, "Poor")
+                    <label>Poor</label>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.TextAreaFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

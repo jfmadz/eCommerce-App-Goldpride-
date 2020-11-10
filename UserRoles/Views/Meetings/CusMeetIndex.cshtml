@@ -1,0 +1,105 @@
+﻿@model IEnumerable<UserRoles.Models.Meeting>
+
+@{
+    ViewBag.Title = "CusMeetIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>My Meetings</h2>
+
+<form asp-controller="Meetings" asp-action="CusMeetIndex">
+
+
+    <p>You may search by Date</p>
+    <input type="text" name="SearchString" />
+    <input type="submit" value="Filter" />
+
+
+
+</form>
+<br />
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Start)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.End)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Attend)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discussion)
+            </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Start)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.End)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Attend)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discussion)
+                </td>*@
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.messageID }) |*@
+                @Html.ActionLink("Details", "Details", new { id = item.messageID }) |
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.messageID })*@
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

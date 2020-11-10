@@ -1,0 +1,317 @@
+﻿
+@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "CusDetails";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+@if (Request.IsAuthenticated && !User.IsInRole("Admin") || !User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Request.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<style>
+    .flex-container {
+        display: flex;
+        /* background-color: DodgerBlue;*/
+    }
+
+        .flex-container > div {
+            /*background-color: #f1f1f1;*/
+            margin: 80px;
+            padding: 90px;
+            font-size: 10px;
+        }
+</style>
+
+<h2>Customer Order Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MySignature)
+        </dt>
+        <dd>
+
+            @try
+            {
+
+                var base64 = Convert.ToBase64String(Model.MySignature);
+                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+            }
+            catch
+            {
+                @*if (item.Image == null)
+                {
+                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                }*@
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CollDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CollDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ConSig)
+        </dt>
+        <dd>
+
+            @try
+            {
+
+                var base64 = Convert.ToBase64String(Model.ConSig);
+                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+            }
+            catch
+            {
+                @*if (item.Image == null)
+                {
+                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                }*@
+            }
+        </dd>
+
+        @if (Request.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Driver"))
+        {
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DriverID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DriverID)
+            </dd>
+        }
+    </dl>
+
+
+</div>
+<dl class="flex-container">
+    <dt>
+        @Html.DisplayNameFor(model => model.Seen)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Seen)
+    </dd>
+
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.PickUp)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.PickUp)
+    </dd>
+
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.OutForDel)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.OutForDel)
+    </dd>
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.Delivered)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Delivered)
+    </dd>
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.Returned)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Returned)
+    </dd>
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.OutForCol)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.OutForCol)
+    </dd>
+    <dt style="padding-left:5%">
+        @Html.DisplayNameFor(model => model.Collected)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Collected)
+    </dd>
+</dl>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Sub Total</th>
+    </tr>
+    @foreach (var item in Model.OrderDetail)
+    {
+        <tr>
+            <td>@item.ItemsHire.ProductName</td>
+
+            <td>@item.ItemsHire.Price.ToString("C")</td>
+            <td>@item.Quantity</td>
+            <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
+        </tr>
+
+        @*<tr>
+            <td colspan="3">Deposit:</td>
+            <td>
+               
+                @item.Deposit.ToString("C")
+            </td>
+        </tr>*@
+        <tr>
+            <td colspan="3">Total:</td>
+            <td>
+                
+                @item.Total.ToString("C")
+            </td>
+        </tr>
+
+
+
+        @*<tr>
+                <td>@item.ItemsHire.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Total.ToString("C")</td>
+                <td>@item.Deposit.ToString("C")</td>
+
+
+            </tr>*@
+    }
+  
+</table>
+
+
+
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |*@
+    @*@using (Html.BeginForm("ActionQrCode", "Order", FormMethod.Post, new { id = "customer-form" }))
+        {
+            <input type="submit" id="btnGenerate" value="Generate QR" class="btn btn-success" onclick="location.href=@Url.Action("ActionQrCode", "Order", null)" />
+        }*@
+    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID })
+
+
+        <br />
+        @Html.ActionLink("Back to List", "Index")
+
+    } |
+
+    @if (Request.IsAuthenticated && User.IsInRole("Driver"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID })
+
+
+        <br />
+        @Html.ActionLink("Back to List", "DCollection", "DriverVM")
+    }
+
+
+
+    @if (Request.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Driver"))
+    {
+        @Html.ActionLink("Back to List", "CusIndex")
+    }
+</p>

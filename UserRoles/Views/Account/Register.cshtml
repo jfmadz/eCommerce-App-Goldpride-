@@ -1,0 +1,124 @@
+﻿@using UserRoles.Models
+@model UserRoles.Models.RegisterViewModel
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<br />
+<br />
+<br />
+<br />
+@*<h2>@ViewBag.Title.</h2>*@
+
+@*<head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <meta name="keywords" content="Quick Register Form Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+        <link href="/web/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
+        <link href="/web/css/style.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
+    </head>*@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link href="/web/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
+    <link href="/web/css/style.css" rel="stylesheet" type="text/css" media="none" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
+
+</head>
+<div class="row">
+    <div class="col-md-8">
+        <section id="RegisterForm">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <br />
+                <br />
+                @Html.AntiForgeryToken()
+                <h2><b>Create a new account.</b></h2>
+                <hr />
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Surname, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.MySignature, htmlAttributes: new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(m => m.MySignature, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.MySignature, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-danger btn-block" value="Register" />
+                    </div>
+                </div>
+            }
+        </section>
+
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="col-md-4">
+        <section id="socialLoginForm">
+            @Html.Partial("SignUpGuide", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </section>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/jquery.validate.unobtrusive.min.js")
+    @Scripts.Render("~/Scripts/signature_pad.min.js")
+    @Scripts.Render("~/Scripts/SignaturePadInit.js")
+    @*<script src="~/Scripts/signature_pad.min.js"></script>
+    <script src="~/Scripts/SignaturePadInit.js"></script>*@
+}

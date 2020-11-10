@@ -1,0 +1,97 @@
+﻿@model UserRoles.Models.OrderDetail
+
+@{
+    ViewBag.Title = "DetailCapture";
+}
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Collection Information</h2>
+
+@using (Html.BeginForm("ProcessOrderAsync", "ShoppingCart", FormMethod.Post, new { id = "customer-form" }))
+{
+    <table>
+        <tr>
+            <td colspan="2" style="text-align:center;"><b>Collectors Information:</b></td>
+        </tr>
+        <tr>
+            <td>Customer Name</td>
+            <td> <input type="text" name="cusName" /></td>
+        </tr>
+        <tr>
+            <td>Customer Surname</td>
+            <td> <input type="text" name="cusSurname" /></td>
+        </tr>
+        <tr>
+            <td>Customer Phone</td>
+            <td> <input type="text" name="cusPhone" /></td>
+        </tr>
+        <tr>
+            <td>Customer Email</td>
+            <td> <input type="text" name="cusEmail" /></td>
+        </tr>
+        <tr>
+            <td>Collection Date</td>
+            <td> <input type="date" name="collDate"  /></td>
+        </tr>
+        <tr>
+
+
+            @*<td colspan="3"><input type="submit" value="Process Order" class="update-shopping" onclick="location.href='@Url.Action("ProcessOrder", "ShoppingCart",null)" /></td>*@
+        </tr>
+
+
+
+    </table>
+    <div> <input type="submit" value="Procced to Payment" class="btn btn-danger btn-block" onclick="location.href='@Url.Action("PaymentWithPaypal", "ShoppingCart",null)" /></div>
+}
+<script type="text/javascript">
+    $("#customer-form").validate({
+        rules: {
+            cusName: {
+                required: true
+            },
+            cusSurname: {
+                required: true
+            },
+            cusPhone: {
+                required: true
+            },
+            cusEmail: {
+                required: true
+            },
+            colDate: {
+                required: true,
+                
+
+            }
+        }
+    });
+   
+    //if (cusName == "" || cusName == undefined) {
+    //    alert("please add Name")
+    //    return false;
+    //}
+    //if (cusSurname == "" || cusSurname == undefined) {
+    //    alert("please add Surname")
+    //    return false;
+    //} if (cusPhone == "" || cusPhone == undefined) {
+    //    alert("please add phone number")
+    //    return false;
+    //} if (cusEmail == "" || cusEmail == undefined) {
+    //    alert("please add Email")
+    //    return false;
+    //} if (collDate < Date.now) {
+    //    alert("please add Date")
+    //    return false;
+    //}
+</script>
+
+

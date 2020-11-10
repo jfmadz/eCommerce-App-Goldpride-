@@ -1,0 +1,164 @@
+﻿
+
+<div style="position:fixed;top:0px;left:0px;width:0;height:0;" id="scrollzipPoint"></div>
+<!-- banner -->
+@*<div id="home" class="w3ls-banner">*@
+
+
+<!-- //banner -->
+<!-- header -->
+<div class="header-w3layouts">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Events</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="gp-logo">
+                    <img src="~/Content/images/GP_BLUE.jpg" alt="logo" />
+
+                    <h1><a class="navbar-brand" href="/Home/Index">Gold Pride </a></h1>
+                </div>
+
+
+
+
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden"><a class="page-scroll" href="#page-top"></a>	</li>
+
+                    <li><a class="hvr-sweep-to-right" href="/Home/Index">Home</a></li>
+
+
+                    @*<li><a class="hvr-sweep-to-right" href="/Cal/Client">Book Appointment</a></li>*@
+                    <li><a class="hvr-sweep-to-right" href="@Url.Action("Client","Cal")">Book Appointment</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/ItemsHires/ItemsInventory">Items</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/Packages/CusBrowse">Packages</a></li>
+                    @*<li><a class="hvr-sweep-to-right" href="/Maps/Create">Map</a></li>*@
+                    @*<li class="hvr-sweep-to-right">@Html.ActionLink("Role Management", "Index", "Role")</li>*@
+                    @*<li><a class="hvr-sweep-to-right" href="/OrderVM/Index">Order</a></li>*@
+
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Orders <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+
+
+
+
+                                <li><a class="hvr-sweep-to-right" href="/Order/Index">New Orders</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/Seen">Seen</a></li>
+                                @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                            </ul>
+
+
+                        </li>
+                    }
+
+                    @*<li class="dropdown">
+            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Pages <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a class="hvr-sweep-to-right" href="/Home/Index">Home</a></li>
+
+
+                <li><a class="hvr-sweep-to-right" href="/Home/Contact">Contact</a></li>
+            </ul>
+        </li>*@
+                    @*<li><a class="hvr-sweep-to-right" href="/Decors/DecorInentory">Gallery</a></li>*@
+
+
+
+                    @*<li><a class="hvr-sweep-to-right" href="#">Gallery</a></li>*@
+                    @*<li><a class="hvr-sweep-to-right" href="/Contacts/Index">Contact</a></li>*@
+                    @*<li><a class="hvr-sweep-to-right" href="/Home/About">About</a></li>*@
+
+
+
+                    @*<li  class="hvr-sweep-to-right">@Html.ActionLink("Roles", "Index", "Role")</li>*@
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Role Management", "Index", "Role")</li>
+                        <li><a class="hvr-sweep-to-right" href="/Cal/Index">Calendar</a></li>
+
+
+                    }
+
+                    @if (Request.IsAuthenticated && !User.IsInRole("Admin"))
+                    {
+
+                    }
+                    @if (Request.IsAuthenticated && User.IsInRole("Manager"))
+                    {
+
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Inventory", "ItemInventoryAdmin", "ItemsHires")</li>
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Decor", "DecorInventoryAdmin", "DecorItems")</li>
+
+                    }
+                    @if (Request.IsAuthenticated)
+                    {
+                        @*<li>@{Html.RenderAction("CartSummary", "ShoppingCart");}</li>*@
+                        <li><a class="hvr-sweep-to-right" href="/ShoppingCart/Index">Cart</a></li>
+                        @*<li><a class="hvr-sweep-to-right" href="/Order/CusIndex">My Orders</a></li>*@
+                        @*<li><a class="hvr-sweep-to-right" href="/Order/Info">My Info</a></li>*@
+
+                    }
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="hvr-sweep-to-right" href="/Home/About">About Us</a></li>
+                            <li><a class="hvr-sweep-to-right" href="/Contacts/Index">Contact</a></li>
+                            <li><a class="hvr-sweep-to-right" href="/Reviews/Index">Reviews</a></li>
+
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Account <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+
+
+
+                            <li class="hvr-sweep-to-right ">@Html.Partial("_LoginPartial")</li>
+                            @if (Request.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Driver"))
+                            {
+                                <li><a class="hvr-sweep-to-right" href="/Meetings/CusMeetIndex">My Meetings</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/CusOngoing">Current Orders</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/CusEvents">Current Events</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/CusIndex">Order History</a></li>
+
+                            }
+
+                            @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                        </ul>
+
+
+
+
+                </ul>
+
+                <ul></ul>
+
+
+            </div>
+
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+</div>
+<!-- //header -->

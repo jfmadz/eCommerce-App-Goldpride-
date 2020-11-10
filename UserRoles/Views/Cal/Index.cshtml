@@ -1,0 +1,350 @@
+﻿@model IEnumerable<UserRoles.Models.Event>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h1>My Meetings</h1>
+<br />
+<br />
+
+<td>
+    @*<h1 style="text-align:center">My Bookings</h1>*@
+</td>
+<p id="current"></p>
+<div>
+    <p id="weekend"></p>
+</div>
+
+<div id="calendar"></div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span id="eventTitle"></span></h4>
+            </div>
+            <div class="modal-body"></div>
+            <button id="btnDelete" class="btn btn-default btn-sm pull-right">
+                <span class="glyphicon glyphicon-remove"></span>Remove
+            </button>
+            <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px; color:lawngreen">
+                <span class="glyphicon glyphicon-pencil "></span>Edit
+            </button>
+
+            <p id="pDetails"></p>
+            <div class="modal-footer"> </div>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"> Close</button>
+        </div>
+    </div>
+</div>
+
+<div id="myModalSave" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Save Event</h4>
+
+                <div class="modal-body"></div>
+                <form class="col-md-12 form-horizontal">
+                    <input type="hidden" id="hdEventId" value="0" />
+                    <div class="form-group">
+                        <label>Event Type</label><label style="color:lightgrey">(Please state the type of event)</label>
+                        <input type="text" id="txtEtype" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Start time of appointment</label><label style="color:lightgrey">(Please choose a date and time)</label>
+                        <div class="input-group date" id="dtp">
+                            <input type="text" id="txtStime" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>End time of appointment</label><label style="color:lightgrey">(Please choose an end date and time)</label>
+                        <div class="input-group date" id="dtp1">
+                            <input type="text" id="txtEtime" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Full name</label> <label style="color:lightgrey">(Please fill in full name)</label>
+                        <input type="text" id="txtDesc" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Contact number</label><label style="color:lightgrey">(Please fill contact number)</label>
+                        <input type="text" id="txtNum" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label><label style="color:lightgrey">(Please fill Email Address)</label>
+                        <input type="text" id="txtEmail" class="form-control" />
+                    </div>
+
+                    <button type="button" id="btnSave" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"> Close</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media=" print" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script>
+
+        var d = new Date();
+        document.getElementById("current").innerHTML
+            = d;
+
+        var w = new Date();
+        var wd = new Array(7);
+        wd[1] = "Monday";
+        wd[2] = "Tuesday";
+        wd[3] = "Wednesday";
+        wd[4] = "Thursday";
+        wd[5] = "Friday";
+        wd[6] = "Saturday";
+        wd[0] = "Sunday";
+        var g = wd[w.getDay()];
+        document.getElementById("weekend").innerHTML
+            = g;
+
+
+
+        $(document).ready(function () {
+            var events = [];
+            var sEvent = null;
+            getEventandRenderCalendar();
+            function getEventandRenderCalendar() {
+                events = [];
+                $.ajax({
+                    type: "GET",
+                    url: "/Cal/GetEvents",
+                    success: function (data) {
+                        $.each(data, function (i, v) {
+                            events.push({
+                                eventId: v.EventId,
+                                title: v.EventType,
+                                fname: v.Fname,
+                                start: moment(v.Start),
+                                end: v.End != null ? moment(v.End) : null,
+                                cnum: v.contactNum,
+                                email: v.Email,
+
+                            });
+                        })
+
+                        GenerateCalendar(events);
+                    },
+                    error: function (error) {
+                        alert('failed');
+                    }
+                })
+            }
+
+            function GenerateCalendar(events) {
+                $('#calendar').fullCalendar('destroy');
+                $('#calendar').fullCalendar({
+                    contentHeight: 400,
+                    defaultDate: new Date(),
+                    timeFormat: 'h(:mm)a',
+                    navLinks: true,
+                    nowIndicator: true,
+                    businessHours: true, // display business hours
+                    selectOverlap: false,
+                    weekends: false,
+                    editable: true,
+                    overlap: false,
+                    displayEventTime: true,
+                    displayEventEnd: true,
+                    header: {
+                        left: 'prevYear,prev,next,nextYear  today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    eventLimit: true,
+                    eventColor: 'lightblue',
+                    eventTextColor: 'black',
+                    eventBorderColor: 'blue',
+                    events: events,
+                    eventClick: function (calEvent, jsEvent, view) {
+                        sEvent = calEvent;
+                        $('#myModal #eventTitle').text(calEvent.title);
+                        var $description = $('<div/>');
+                        $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("YYYY-MM-DD HH:mm a")));
+                        if (calEvent.end != null) {
+                            $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("YYYY-MM-DD HH:mm a")));
+                        }
+                        $description.append($('<p/>').html('<b>Name:</b>' + calEvent.fname));
+                        $('#myModal #pDetails').empty().html($description);
+
+                        $description.append($('<p/>').html('<b>Contact number:</b>' + calEvent.cnum));
+                        $('#myModal #pDetails').empty().html($description);
+                        $description.append($('<p/>').html('<b>Email address:</b>' + calEvent.email));
+                        $('#myModal #pDetails').empty().html($description);
+
+                        $('#myModal').modal();
+                    },
+                    selectable: true,
+                    select: function (start, end) {
+                        sEvent = {
+                            eventId: 0,
+                            title: '',
+                            fname: '',
+                            start: start,
+                            end: end,
+                            cnum: '',
+                            email: ''
+                        };
+                        openAddEditForm();
+                        $('#calendar').fullCalendar('unselect');
+                    }
+                })
+            }
+
+            $('#btnEdit').click(function () {
+                openAddEditForm();
+            })
+            $('#btnDelete').click(function () {
+                if (sEvent != null && confirm("confirm action")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Cal/DeleteEv",
+                        data: { 'eventId': sEvent.eventId },
+
+                        success: function (data) {
+                            if (data.status) {
+                                getEventandRenderCalendar();
+                                $('#myModal').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }
+            })
+            $('#dtp, #dtp1').datetimepicker({
+                format: 'YYYY/MM/DD HH:mm A'
+            });
+
+            function openAddEditForm() {
+                if (sEvent != null) {
+                    $('#hdEventId').val(sEvent.eventId);
+                    $('#txtEtype').val(sEvent.title);
+                    $('#txtStime').val(sEvent.start.format('YYYY/MM/DD HH:mm A'));
+                    $('#txtEtime').val(sEvent.end.format('YYYY/MM/DD HH:mm A'));
+                    $('#txtDesc').val(sEvent.fname);
+                    $('#txtNum').val(sEvent.cnum);
+                    $('#txtEmail').val(sEvent.email);
+                }
+                $('#myModal').modal('hide');
+                $('#myModalSave').modal();
+            }
+            $('#btnSave').click(function () {
+                var txtEtype = $("#txtEtype").val();
+                var txtDesc = $("#txtDesc").val();
+                var txtNum = $("#txtNum").val();
+                var txtEmail = $("#txtEmail").val();
+
+                if (txtEtype == "" || txtEtype == undefined) {
+                    alert("please enter event type")
+                    return false;
+                }
+                if (txtDesc == "" || txtDesc == undefined) {
+                    alert("please enter event description")
+                    return false;
+                }
+                if (txtDesc.includes("0") || txtDesc.includes("1") ||
+                    txtDesc.includes("2") || txtDesc.includes("3") ||
+                    txtDesc.includes("4") || txtDesc.includes("5") ||
+                    txtDesc.includes("6") || txtDesc.includes("7") ||
+                    txtDesc.includes("8") || txtDesc.includes("9")
+                ) {
+                    alert("please use letters")
+                    return false;
+                }
+                if (txtNum == "" || txtNum == undefined) {
+                    alert("please add contact number")
+                    return false;
+                }
+                if (txtNum.length > 10 || txtNum.length < 10) {
+                    alert("please add correct contact number")
+                    return false;
+                }
+
+
+                if (txtNum.includes("0") || txtNum.includes("1") ||
+                    txtNum.includes("2") || txtNum.includes("3") ||
+                    txtNum.includes("4") || txtNum.includes("5") ||
+                    txtNum.includes("6") || txtNum.includes("7") ||
+                    txtNum.includes("8") || txtNum.includes("9")
+                ) { }
+                else {
+                    alert("please add correct contact number")
+                    return false;
+                }
+
+                var startDate = moment($('#txtStime').val(), "YYYY/MM/DD HH:mm A").toDate();
+                var endDate = moment($('#txtEtime').val(), "YYYY/MM/DD HH:mm A").toDate();
+                if (startDate > endDate || startDate <= d) {
+                    alert("please enter valid date and time");
+                    return;
+                }
+
+                if (startDate.getDay() == 0 || startDate.getDay() == 6) {
+                    alert("no meetings on weekends");
+                    return;
+                }
+
+
+                var data = {
+                    EventId: $('#hdEventId').val(),
+                    EventType: $('#txtEtype').val().trim(),
+                    Start: $('#txtStime').val().trim(),
+                    End: $('#txtEtime').val().trim(),
+                    Fname: $('#txtDesc').val(),
+                    contactNum: $('#txtNum').val(),
+                    Email: $('#txtEmail').val()
+                }
+                SaveEv(data);
+            })
+            function SaveEv(data) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Cal/SaveEv",
+                    data: data,
+
+                    success: function (data) {
+                        if (data.status) {
+                            getEventandRenderCalendar();
+                            $('#myModalSave').modal('hide');
+                        }
+                    },
+                    error: function () {
+                        alert('Failed');
+                    }
+                })
+            }
+        })
+    </script>
+}

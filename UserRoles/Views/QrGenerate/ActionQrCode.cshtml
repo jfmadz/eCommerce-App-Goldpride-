@@ -1,0 +1,67 @@
+﻿@model UserRoles.Models.QRModel
+
+@{
+
+    Layout = null;
+
+}
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+
+    <title>
+
+        How To Generate QR Code in MVC Using C#
+
+    </title>
+
+</head>
+
+<body>
+
+    @using (Html.BeginForm("ActionQrCode", "QrGenerate", FormMethod.Post))
+
+    {
+
+        <div class="form-control">
+
+            <div class="col-md-12">
+
+                <div class="col-md-3">
+
+                    Enter Message:
+
+                </div>
+
+                <div class="col-md-3">
+
+                    @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <br />
+
+        <input type="submit" id="btnGenerate" value="Generate" class="btn btn-default" />
+
+        <div class="col-md-3">
+
+            <img src="@ViewBag.Url" width="80px" height="80px" alt="Alternate Text" />
+
+        </div>
+
+    }
+
+</body>
+
+</html>

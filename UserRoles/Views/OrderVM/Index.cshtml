@@ -1,0 +1,105 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserRoles.Models.OrderVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Index</h2>
+
+<li>@Html.ActionLink("Export Order Lisitng", "Test")</li>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.First().OrderID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ProductID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Total)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Surname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CustomerPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().CustomerAddress)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAddress)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
+            </td>
+        </tr>
+    }
+
+</table>
+<div> <input type="submit" value="Send Email" class="btn btn-danger btn-block" onclick="location.href='@Url.Action("Index", "OrderVM",null)" /></div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+  new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })

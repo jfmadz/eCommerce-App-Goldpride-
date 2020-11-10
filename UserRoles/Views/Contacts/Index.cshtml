@@ -1,0 +1,107 @@
+﻿@*@model IEnumerable<UserRoles.Models.Contact>*@
+@model UserRoles.Models.Contact
+<br /><br />
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="w3ls_address_mail_footer_grids">
+        <div class="container">
+            <h2 class="heading-agileinfo">Contact<span>Gold Pride is a professionally managed Events Company</span></h2>
+         
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+               
+                @*<img src="~/images/Photo1.gif" alt="Sample Photo" width="200" height="200" />*@
+                
+                @*<p>Email us with any questions or inquiries. We would be happy to answer any questions that peek your interest.</p>*@
+                
+
+                <br />
+                <div class="col-md-6 contact-form">
+                    <h4 class="white-w3ls">Contact Form</h4>
+
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <b style="color:white">  @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</b>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                    <div class="form-group">
+                     <b style="color:white">   @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })</b>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                 <b style="color:white">       @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })</b>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                  <b style="color:white">      @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })</b>
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Message, new { @class = "col-md-12", @cols = 40, @rows = 20 })
+                            @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Send Email" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @*<div>
+                @if (ViewBag.Message != null)
+                {
+                    <div><b> @ViewBag.Message</b></div>
+
+
+                }
+            </div>*@
+            <div class="col-md-6 contactright">
+                <h3>Contact Address</h3>
+                <div class="w3ls_footer_grid_left">
+                    <div class="wthree_footer_grid_left">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </div>
+                    <p>3481 Melrose Place, Beverly Hills, <span>New York City 90210.</span></p>
+                </div>
+                <div class="w3ls_footer_grid_left">
+                    <div class="wthree_footer_grid_left">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                    </div>
+                    <span>082 079 8501</span>
+                    <p>
+                        <span>+(010) 123 4565 35</span>
+
+                    </p>
+                </div>
+                <div class="w3ls_footer_grid_left">
+                    <div class="wthree_footer_grid_left">
+                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    </div>
+                    <p>
+                        <span>dalphene@gmail.com</span>
+                        <span><a href="mailto:info@example.com">info@example2.com</a></span>
+                    </p>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+          
+</div>
+</div>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<UserRoles.Models.Review>
+
+@{
+    ViewBag.Title = "AdminRevIndex";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>Reviews</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Rating)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isActive)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isActive)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
+                @*@Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CommentID })*@
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

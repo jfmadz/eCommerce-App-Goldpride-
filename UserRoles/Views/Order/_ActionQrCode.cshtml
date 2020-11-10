@@ -1,0 +1,11 @@
+﻿@model UserRoles.Models.QRModel
+
+@using (Html.BeginForm("ActionQrCode", "Order", FormMethod.Post))
+
+{
+
+                @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+
+    <input type="submit" id="btnGenerate" value="Generate" class="btn btn-success" />
+
+}

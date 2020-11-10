@@ -1,0 +1,105 @@
+﻿@model IEnumerable<UserRoles.Models.DriverVM>
+
+@{
+    ViewBag.Title = "DDelivery";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>Driver Delivery</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeliveryAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DriverID)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhone)
+            </td>
+            <td>
+
+                @Html.DisplayFor(modelItem => item.DriverID)
+            </td>
+            <td>
+                <a href='@Url.Action( "CusDetails", "Order", new {id = item.OrderID})' class="btn btn-primary">Details</a>
+                @*@Html.ActionLink("Details", "Details", "Order", new {id = item.OrderID}) |*@
+
+
+                @*@using (Html.BeginForm("AcceptOrder", "DriverVM", FormMethod.Post))
+
+                    {
+                        <input type="submit" class="button btn-success " value="Accept Order" />
+                    }*@
+                @*@Html.ActionLink("Accept Order", "Accept", new { id = item.OrderID })*@
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

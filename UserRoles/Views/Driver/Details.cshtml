@@ -1,0 +1,139 @@
+﻿@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Distance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Distance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PickUp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickUp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OutForDel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OutForDel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Delivered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Delivered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Returned)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Returned)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OutForCol)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OutForCol)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Collected)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Collected)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CollDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CollDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
