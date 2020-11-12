@@ -1407,6 +1407,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="voice\index.html" />
+    <Content Include="voice\script.js" />
+    <Content Include="voice\styles.css" />
     <Content Include="web\css\font-awesome.min.css" />
     <Content Include="web\css\style.css" />
     <Content Include="web\images\4.jpg" />
@@ -1641,6 +1644,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Meetings\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

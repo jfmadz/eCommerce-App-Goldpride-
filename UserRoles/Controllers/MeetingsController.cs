@@ -28,7 +28,10 @@ namespace UserRoles.Controllers
             //return View(db.Meetings.ToList());
             return View(list.ToList());
         }
-
+        public ActionResult Test()
+        {
+            return View();
+        }
         public ActionResult CusMeetIndex(string searchString)
         {
             var list = from u in db.Meetings
