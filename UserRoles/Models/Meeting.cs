@@ -43,8 +43,12 @@ namespace UserRoles.Models
 
         [AllowHtml]
         [Required(ErrorMessage = "Please Enter a description of what was discussed")]
-        [Display(Name = "Discussion")]
+        [Display(Name = "Voice to Text")]
         public string Discussion { get; set; }
+
+        [AllowHtml]
+        [Display(Name ="Discussion")]
+        public string ckeditor { get; set; }
 
 
         public virtual Category Category { get; set; }

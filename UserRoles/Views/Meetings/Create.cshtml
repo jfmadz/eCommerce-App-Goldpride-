@@ -28,8 +28,7 @@
 
 </head>
 
-@*<script src="~/ckeditors/ckeditor.js"></script>
-    <script src="~/ckeditors/adapters/jquery.js"></script>*@
+
 <h2>Create</h2>
 @using (Html.BeginForm("Create", "Meetings", FormMethod.Post))
 {
@@ -60,12 +59,12 @@
                 </div>
 
                 @*<div class="form-group">
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -76,17 +75,17 @@
                 </div>
 
                 @*<div class="form-group">
-            @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.End, new { htmlAttributes = new { @type = "time" } })
-                @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                        @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.End, new { htmlAttributes = new { @type = "time" } })
+                            @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Attend, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextAreaFor(model => model.Attend, new { htmlAttributes = new { @class = "form-control" , @rows = "4", @cols = "130" } })
+                        @Html.TextAreaFor(model => model.Attend, new { htmlAttributes = new { @class = "form-control", @rows = "4", @cols = "130" } })
                         @Html.ValidationMessageFor(model => model.Attend, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -109,19 +108,30 @@
                             <input type="button" value="Pause" id="pause-record-btn" />
                             <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
                         </div>
-                      
+
                         @*<button id="start-record-btn" title="Start Recording">Start Recognition</button>*@
                         @*<button id="pause-record-btn" title="Pause Recording">Pause Recognition</button>*@
                         @*<button id="save-note-btn" title="Save Note">Save Note</button>
-                        <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>*@
+                            <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>*@
 
                         @*<h3>My Notes</h3>
-                <ul id="notes">
-                    <li>
-                        <p class="no-notes">You don't have any notes.</p>
-                    </li>
-                </ul>*@
+                            <ul id="notes">
+                                <li>
+                                    <p class="no-notes">You don't have any notes.</p>
+                                </li>
+                            </ul>*@
 
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div></div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ckeditor, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextArea(@*model => model.Description*@"ckeditor", new { @class = "ckeditor", @id = "ckeditor", @rows = "200" })
+                        @Html.ValidationMessageFor(model => model.ckeditor)
                     </div>
                 </div>
                 <div class="form-group">
@@ -135,7 +145,7 @@
 
 
 
-</body>
+    </body>
 
 }
 
@@ -149,4 +159,6 @@
 @section scripts{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/voice/script.js"></script>
+    <script src="~/ckeditors/ckeditor.js"></script>
+    <script src="~/ckeditors/adapters/jquery.js"></script>
 } 

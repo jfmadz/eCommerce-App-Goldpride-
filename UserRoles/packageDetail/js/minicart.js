@@ -431,7 +431,7 @@ exports.dirname = function(path) {
 
 exports.basename = function(path, ext) {
   var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
+  
   if (ext && f.substr(-1 * ext.length) === ext) {
     f = f.substr(0, f.length - ext.length);
   }
@@ -1037,7 +1037,7 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 }
 
-// TODO(shtylman)
+
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
