@@ -41,11 +41,11 @@ button:focus {
 }
 
 .app {
-    margin: 40px auto;
+    margin: 200px auto;
 }
 
-#note-textarea {
-    margin: 20px 0;
+#Discussion {
+    margin: 200px, 200px;
 }
 
 #recording-instructions {
