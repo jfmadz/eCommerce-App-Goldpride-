@@ -9,7 +9,8 @@ catch(e) {
 }
 
 
-var noteTextarea = $('#note-textarea');
+//var noteTextarea = $('#note-textarea');
+var noteTextarea = $('#Discussion');
 var instructions = $('#recording-instructions');
 var notesList = $('ul#notes');
 
