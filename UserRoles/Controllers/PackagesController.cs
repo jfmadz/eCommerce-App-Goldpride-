@@ -19,7 +19,7 @@ namespace UserRoles.Controllers
         public ActionResult CusBrowse(string searchString, int? page)
         {
             var packages = (from i in db.Packages
-                            where i.IsActive == true
+                            where i.IsActive == true 
                             select i).Include(i => i.Category);
             if ((!string.IsNullOrEmpty(searchString)))
             {

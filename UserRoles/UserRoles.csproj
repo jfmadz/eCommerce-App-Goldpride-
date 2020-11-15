@@ -457,6 +457,7 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderVMController.cs" />
     <Compile Include="Controllers\PackagesController.cs" />
+    <Compile Include="Controllers\PackageVMController.cs" />
     <Compile Include="Controllers\ProductTypesController.cs" />
     <Compile Include="Controllers\QrGenerateController.cs" />
     <Compile Include="Controllers\ReviewsController.cs" />
@@ -494,6 +495,7 @@
     <Compile Include="Models\OrderVM.cs" />
     <Compile Include="Models\Package.cs" />
     <Compile Include="Models\PackageImages.cs" />
+    <Compile Include="Models\PackageVM.cs" />
     <Compile Include="Models\PayPalConfig.cs" />
     <Compile Include="Models\PaypalConfiguration.cs" />
     <Compile Include="Models\ProductType.cs" />
@@ -1548,6 +1550,7 @@
     <Content Include="Views\ShoppingCart\Success.cshtml" />
     <Content Include="Views\Meetings\Test.cshtml" />
     <Content Include="Views\Packages\PackageDetail.cshtml" />
+    <Content Include="Views\PackageVM\GetPackage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
