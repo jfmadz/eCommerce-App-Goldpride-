@@ -1551,6 +1551,8 @@
     <Content Include="Views\Meetings\Test.cshtml" />
     <Content Include="Views\Packages\PackageDetail.cshtml" />
     <Content Include="Views\PackageVM\GetPackage.cshtml" />
+    <Content Include="Views\Home\Camera.cshtml" />
+    <Content Include="Views\Reviews\ChartPie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

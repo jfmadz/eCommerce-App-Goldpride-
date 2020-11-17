@@ -18,12 +18,13 @@ namespace UserRoles.Models
            
 
             IJobDetail job = JobBuilder.Create<EmailJobController>().Build();
+           
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                 .OnEveryDay()
-                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(11, 30))
+                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(14, 33))
                 )
                 .Build();
             //ITrigger trigger = TriggerBuilder.Create()

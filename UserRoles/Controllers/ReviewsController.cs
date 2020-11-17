@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,6 +10,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using UserRoles.Models;
+using System.Web.Helpers;
+using Quartz;
 
 namespace UserRoles.Controllers
 {
@@ -17,6 +20,44 @@ namespace UserRoles.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public ActionResult ChartPie()
+        {
+            ArrayList xValue = new ArrayList();
+            ArrayList yValue = new ArrayList();
+            var poor = (from i in db.Reviews
+                       where i.Rating == "Poor"
+                       select i).Count();
+            var res = (from i in db.Reviews
+                       where i.Rating == "Good"
+                       select i ).Count();
+            var result = (from i in db.Reviews
+                          where i.Rating == "Excellent"
+                        
+                          select i).Count();
+
+            var names = (from i in db.Reviews
+                          
+
+                          select i);
+            result.ToString().ToList().ForEach(rs => yValue.Add(result));
+            res.ToString().ToList().ForEach(rs => yValue.Add(res));
+            poor.ToString().ToList().ForEach(rs => yValue.Add(poor));
+            //result.ToString().ToList().ForEach(rs => xValue.Add(result));
+            //res.ToString().ToList().ForEach(rs => xValue.Add(result));
+            //poor.ToString().ToList().ForEach(rs => xValue.Add(poor));
+            names.ToList().ForEach(rs => xValue.Add(rs.Rating));
+
+
+            new Chart(width: 600, height: 400, theme: ChartTheme.Blue)
+                .AddTitle("Chart for Review[Pie Chart]")
+                .AddLegend("Summary")
+                .AddSeries("Default", chartType: "Pie", xValue: xValue, yValues: yValue)
+               
+                .ToWebImage("bmp");
+                
+            
+            return null;
+        }
         // GET: Reviews
         public ActionResult Index()
         {

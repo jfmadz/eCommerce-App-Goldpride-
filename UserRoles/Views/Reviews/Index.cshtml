@@ -57,7 +57,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LName)
             </td>
-
+           
             @*<td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
                     @Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
@@ -67,6 +67,10 @@
     }
 
 </table>
+
+<div>
+    <img src="@Url.Action("ChartPie")" alt="Chart" />
+</div>
 <br />
 <br />
 <br />

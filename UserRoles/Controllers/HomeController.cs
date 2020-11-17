@@ -49,7 +49,10 @@ namespace UserRoles.Controllers
             string Distance = form["dvDistance"];
             return View();
         }
-
+        public ActionResult Camera()
+        {
+            return View();
+        }
 
     }
 
