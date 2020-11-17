@@ -1,0 +1,84 @@
+﻿@model IEnumerable<UserRoles.Models.Package>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Category_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.packageName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().imagePack)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Category_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.packageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.Raw(item.Description)
+                @*@Html.DisplayFor(modelItem => item.Description)*@
+            </td>
+            <td>
+                @try
+                {
+
+                    var base64 = Convert.ToBase64String(item.imagePack);
+                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                }
+                catch
+                {
+                    if (item.imagePack == null)
+                    {
+                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                    }
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.PackageId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.PackageId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PackageId })
+            </td>
+        </tr>
+    }
+
+</table>

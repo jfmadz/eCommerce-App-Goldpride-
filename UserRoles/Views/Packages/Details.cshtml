@@ -1,0 +1,98 @@
+﻿@model UserRoles.Models.Package
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Details</h2>
+
+<div>
+    <h4>Package</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.Category_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Category_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.packageName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.packageName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <br/>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.Raw(Model.Description)
+            @*@Html.DisplayFor(model => model.Description)*@
+        </dd>
+        @foreach(var item in Model.PackageImages)
+        {
+             <dt>
+            @Html.DisplayNameFor(model=> model.PackageImages)
+        </dt>
+        <dd>
+            
+                @try
+                {
+                    var base64 = Convert.ToBase64String(item.Image);
+                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                }
+                catch
+                {
+                    if (item.Image == null)
+                    {
+                        @*<img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />*@
+                    }
+
+                }
+           
+        </dd>
+        }
+       
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PackageId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /><br />
+<br />
+<br />
