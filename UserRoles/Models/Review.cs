@@ -22,5 +22,17 @@ namespace UserRoles.Models
         public string LName { get; set; }
         public bool isActive { get; set; }
 
+        [Required]
+        [Display(Name ="Service Quality")]
+        public string servRating { get; set; }
+
+        [Required]
+        [Display(Name ="Would You Use Services Again?")]
+        public string useService { get; set; }
+
+        [Required]
+        [Display(Name ="Would You Recommend?")]
+        public string recommend { get; set; }
+
     }
 }

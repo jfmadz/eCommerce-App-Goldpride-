@@ -20,44 +20,44 @@ namespace UserRoles.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult ChartPie()
-        {
-            ArrayList xValue = new ArrayList();
-            ArrayList yValue = new ArrayList();
-            var poor = (from i in db.Reviews
-                       where i.Rating == "Poor"
-                       select i).Count();
-            var res = (from i in db.Reviews
-                       where i.Rating == "Good"
-                       select i ).Count();
-            var result = (from i in db.Reviews
-                          where i.Rating == "Excellent"
+        //public ActionResult ChartPie()
+        //{
+        //    ArrayList xValue = new ArrayList();
+        //    ArrayList yValue = new ArrayList();
+        //    var poor = (from i in db.Reviews
+        //               where i.Rating == "Poor"
+        //               select i).Count();
+        //    var res = (from i in db.Reviews
+        //               where i.Rating == "Good"
+        //               select i ).Count();
+        //    var result = (from i in db.Reviews
+        //                  where i.Rating == "Excellent"
                         
-                          select i).Count();
+        //                  select i).Count();
 
-            var names = (from i in db.Reviews
+        //    var names = (from i in db.Reviews
                           
 
-                          select i);
-            result.ToString().ToList().ForEach(rs => yValue.Add(result));
-            res.ToString().ToList().ForEach(rs => yValue.Add(res));
-            poor.ToString().ToList().ForEach(rs => yValue.Add(poor));
-            //result.ToString().ToList().ForEach(rs => xValue.Add(result));
-            //res.ToString().ToList().ForEach(rs => xValue.Add(result));
-            //poor.ToString().ToList().ForEach(rs => xValue.Add(poor));
-            names.ToList().ForEach(rs => xValue.Add(rs.Rating));
+        //                  select i);
+        //    result.ToString().ToList().ForEach(rs => yValue.Add(result));
+        //    res.ToString().ToList().ForEach(rs => yValue.Add(res));
+        //    poor.ToString().ToList().ForEach(rs => yValue.Add(poor));
+        //    //result.ToString().ToList().ForEach(rs => xValue.Add(result));
+        //    //res.ToString().ToList().ForEach(rs => xValue.Add(result));
+        //    //poor.ToString().ToList().ForEach(rs => xValue.Add(poor));
+        //    names.ToList().ForEach(rs => xValue.Add(rs.Rating));
 
 
-            new Chart(width: 600, height: 400, theme: ChartTheme.Blue)
-                .AddTitle("Chart for Review[Pie Chart]")
-                .AddLegend("Summary")
-                .AddSeries("Default", chartType: "Pie", xValue: xValue, yValues: yValue)
+        //    new Chart(width: 600, height: 400, theme: ChartTheme.Blue)
+        //        .AddTitle("Chart for Review[Pie Chart]")
+        //        .AddLegend("Summary")
+        //        .AddSeries("Default", chartType: "Pie", xValue: xValue, yValues: yValue)
                
-                .ToWebImage("bmp");
+        //        .ToWebImage("bmp");
                 
             
-            return null;
-        }
+        //    return null;
+        //}
         // GET: Reviews
         public ActionResult Index()
         {
@@ -102,7 +102,7 @@ namespace UserRoles.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CommentID,Rating,Comment,Date,isActive,User,FName,LName")] Review review)
+        public ActionResult Create([Bind(Include = "CommentID,Rating,Comment,Date,isActive,User,FName,LName,servRating,useService,recommend")] Review review)
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -150,7 +150,7 @@ namespace UserRoles.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CommentID,Rating,Comment,Date,isActive,UserEmail,FName,LName")] Review review)
+        public ActionResult Edit([Bind(Include = "CommentID,Rating,Comment,Date,isActive,UserEmail,FName,LName,servRating,useService,recommend")] Review review)
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
