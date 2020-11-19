@@ -42,7 +42,9 @@ namespace UserRoles.Controllers
         // GET: Packages
         public ActionResult Index()
         {
-            var packages = db.Packages.Include(p => p.Category);
+            //var packages = db.Packages.Include(p => p.Category);
+            var packages = (from i in db.Packages
+                            select i).Include(p => p.Category);
             return View(packages.ToList());
         }
         public ActionResult PackageDetail(int? id)
@@ -85,47 +87,52 @@ namespace UserRoles.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PackageId,packageName,Price,Description,CategoryId,imagePack,IsActive")] Package package,IEnumerable<HttpPostedFileBase> image3)
+        public ActionResult Create([Bind(Include = "PackageId,packageName,Price,Description,CategoryId,imagePack,IsActive")] Package package,HttpPostedFileBase image3)
         {
             //Multi image upload start
-            if (ModelState.IsValid)
-            {
-                db.Packages.Add(package);
-                if (image3 != null)
-                {
-                    var imageList = new List<PackageImages>();
-                    foreach (var image in image3)
-                    {
-                        using (var br = new BinaryReader(image.InputStream))
-                        {
-                            var data = br.ReadBytes(image.ContentLength);
-                            var img = new PackageImages { packageId = package.PackageId };
-                            img.Image = data;
-                            imageList.Add(img);
-                        }
-                    }
-                    package.PackageImages = imageList;
-                }
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            //end
-
-            //if (image3 != null)
-            //{
-            //    package.imagePack = new byte[image3.ContentLength];
-            //    image3.InputStream.Read(package.imagePack, 0, image3.ContentLength);
-            //}
-            //else
-            //{
-            //    ModelState.AddModelError(string.Empty, "Please add image");
-            //}
             //if (ModelState.IsValid)
             //{
             //    db.Packages.Add(package);
+            //    if (image3 != null)
+            //    {
+
+            //        var imageList = new List<PackageImages>();
+            //        foreach (var image in image3)
+            //        {
+            //            using (var br = new BinaryReader(image.InputStream))
+            //            {
+
+            //                var data = br.ReadBytes(image.ContentLength);
+            //                var img = new PackageImages { packageId = package.PackageId };
+            //                img.Image = data;
+            //                imageList.Add(img);
+
+            //            }
+            //        }
+            //        package.PackageImages = imageList;
+            //        package.imagePack = Convert.ToByte(package.PackageImages.) ;
+
+            //    }
             //    db.SaveChanges();
             //    return RedirectToAction("Index");
             //}
+            //end
+
+            if (image3 != null)
+            {
+                package.imagePack = new byte[image3.ContentLength];
+                image3.InputStream.Read(package.imagePack, 0, image3.ContentLength);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Please add image");
+            }
+            if (ModelState.IsValid)
+            {
+                db.Packages.Add(package);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Category_Name", package.CategoryId);
             return View(package);

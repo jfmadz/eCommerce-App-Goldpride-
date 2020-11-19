@@ -634,8 +634,8 @@ namespace UserRoles.Controllers
             onceOffRequest.confirmation_address = "sbtu01@payfast.co.za";
 
             var redirectUrl = $"{this.payFastSettings.ProcessUrl}{onceOffRequest.ToString()}";
-            //return View("OrderSuccess"); enable for local testing
-            return Redirect(redirectUrl);
+            return View("OrderSuccess"); //enable for local testing
+            //return Redirect(redirectUrl);
         }
         [HttpPost]
         public async Task<ActionResult> Notify([ModelBinder(typeof(PayFastNotifyModelBinder))] PayFastNotify payFastNotifyViewModel)

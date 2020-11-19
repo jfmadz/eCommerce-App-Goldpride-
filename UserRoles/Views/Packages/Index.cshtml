@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<UserRoles.Models.Package>
+@*@model UserRoles.Models.Package*@
 
 @{
     ViewBag.Title = "Index";
@@ -41,6 +42,7 @@
     @foreach (var item in Model)
     {
         <tr>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Category.Category_Name)
             </td>
@@ -66,10 +68,7 @@
                 }
                 catch
                 {
-                    if (item.imagePack == null)
-                    {
-                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                    }
+
                 }
             </td>
 
@@ -78,7 +77,13 @@
                 @Html.ActionLink("Details", "Details", new { id = item.PackageId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.PackageId })
             </td>
+
+
+            
+
+
         </tr>
     }
+
 
 </table>
