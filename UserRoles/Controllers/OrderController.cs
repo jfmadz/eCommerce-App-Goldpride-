@@ -429,7 +429,7 @@ namespace UserRoles.Controllers
         {
             var a = (from i in db.Maps
                     join
-                    x in db.Orders on i.Id equals x.OrderID
+                    x in db.Orders on i.orderID equals x.OrderID
                     where i.Distance == 0 && x.PickUp==false && x.Seen == true && x.DriverID == null
                      orderby
                     x.OrderID descending
@@ -447,7 +447,7 @@ namespace UserRoles.Controllers
         {
             var a = (from i in db.Maps
                      join
-   x in db.Orders on i.Id equals x.OrderID
+                     x in db.Orders on i.orderID equals x.OrderID
                      where i.Distance == 0 && x.PickUp == true &&
                      x.Returned==false && x.Seen == true && x.DriverID == null
                      orderby
@@ -474,8 +474,8 @@ namespace UserRoles.Controllers
 
         var a = (from i in db.Maps
                      join
-                      x in db.Orders on i.Id equals x.OrderID
-                     where/* i.Distance > 0 && */x.Collected == false && x.Delivered == false
+                      x in db.Orders on i.orderID equals x.OrderID
+                 where i.Distance > 0 && x.Collected == false && x.Delivered == false
                      /*&& x.CollDate == DateTime.Today*/ && x.DriverID != null
                      orderby
                         x.OrderID descending
@@ -493,8 +493,8 @@ namespace UserRoles.Controllers
         {
             var a = (from i in db.Maps
                      join
-                     x in db.Orders on i.Id equals x.OrderID
-                     where/* i.Distance > 0 && */x.Delivered==true && x.Collected==false
+                     x in db.Orders on i.orderID equals x.OrderID
+                     where i.Distance > 0 && x.Delivered==true && x.Collected==false
                      && x.ExpectedReturnDate == DateTime.Today && x.DriverID != null
                      orderby
                      x.OrderID ascending

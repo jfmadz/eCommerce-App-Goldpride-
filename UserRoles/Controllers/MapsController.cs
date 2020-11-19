@@ -53,8 +53,11 @@ namespace UserRoles.Controllers
             
             if (ModelState.IsValid)
             {
-                
-
+                var order = (from i in db.Orders
+                             where i.Email == User.Identity.Name
+                             orderby i.OrderID descending
+                             select i).First();
+                map.orderID = order.OrderID;
                 map.Email = User.Identity.Name;
                 
                 //string Distance = map.Distance;

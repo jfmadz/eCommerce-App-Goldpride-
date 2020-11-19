@@ -187,7 +187,7 @@ namespace UserRoles.Controllers
                         order.PaymentType = "PayFast";
                         db.Orders.Add(order);
                         db.SaveChanges();
-                        return RedirectToAction("OnceOff", "ShoppingCart");
+                        return RedirectToAction("Create", "Maps");
                     }
                 }
                 catch (Exception ex)

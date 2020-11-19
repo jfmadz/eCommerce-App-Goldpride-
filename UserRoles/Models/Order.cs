@@ -85,6 +85,8 @@ namespace UserRoles.Models
 
         public int QuantReturned { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
-      
+        //public virtual ICollection<Map> Maps { get; set; }
+
+
     }
 }

@@ -17,6 +17,10 @@ namespace UserRoles.Models
         public double Cost { get; set; }
         public string Email { get; set; }
         public string DelAddress { get; set; }
+        public int orderID { get; set; }
+        //public virtual Order Order { get; set; }
+      
+
     }
-       
+
 }
