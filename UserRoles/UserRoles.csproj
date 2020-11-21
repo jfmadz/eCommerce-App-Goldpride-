@@ -328,6 +328,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -1554,6 +1555,7 @@
     <Content Include="Views\PackageVM\GetPackage.cshtml" />
     <Content Include="Views\Home\Camera.cshtml" />
     <Content Include="Views\Reviews\ChartPie.cshtml" />
+    <Content Include="Views\Reviews\Chart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

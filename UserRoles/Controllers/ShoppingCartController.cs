@@ -162,7 +162,7 @@ namespace UserRoles.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DetailCapture([Bind(Include = "MySignature,CustomerName,Surname,CustomerPhone,Email,CollDate,OrderDate,PaymentType,ExpectedReturnDate")] Models.Order order)
+        public ActionResult DetailCapture([Bind(Include = "MySignature,CustomerName,Surname,CustomerPhone,Email,CollDate,OrderDate,PaymentType,ExpectedReturnDate,ReminderDate")] Models.Order order)
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -185,6 +185,7 @@ namespace UserRoles.Controllers
                         order.OrderDate = DateTime.Now;
                         order.ExpectedReturnDate = order.CollDate.AddDays(2);
                         order.PaymentType = "PayFast";
+                        order.ReminderDate = order.CollDate.AddDays(-1);
                         db.Orders.Add(order);
                         db.SaveChanges();
                         return RedirectToAction("Create", "Maps");

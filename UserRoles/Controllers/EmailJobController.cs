@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity;
+﻿
+
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Nexmo.Api;
 using Quartz;
@@ -8,14 +10,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using UserRoles.Models;
+using PageSize = iTextSharp.text.PageSize;
+using Font = iTextSharp.text.Font;
+using Rectangle = iTextSharp.text.Rectangle;
+using iTextSharp.text;
+using System.Web.Mvc;
+using iTextSharp.text.pdf;
+using iTextSharp.text.html;
 
 namespace UserRoles.Controllers
 {
@@ -26,213 +37,2038 @@ namespace UserRoles.Controllers
         //{
         //    return View();
         //}
-      
 
+
+        //[Obsolete]
         public async Task Execute(IJobExecutionContext context)
         {
             ApplicationDbContext db = new ApplicationDbContext();
-            
-
-            //Self Collection
-            var selfC = (from x in db.Orders
-                         join i in db.Maps
-                         on x.OrderID equals i.Id
-                         where i.Distance == 0
-                         && x.PickUp == false
-                         && x.Seen == true
-                         && x.DriverID == null
-                         && x.CollDate == DateTime.Today
-                         select x);
-            foreach (var item in selfC)
+            try
             {
-                //string Email = item.Email;
-                //string phone = item.CustomerPhone;
-                //SmtpClient client = new SmtpClient("smtp.sendgrid.net");
-                //client.Port = 25;
-                //client.Host = "smtp.sendgrid.net";
-                //client.Timeout = 10000;
-                //client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                //client.EnableSsl = true;
-                //client.UseDefaultCredentials = false;
 
-                //var key = Environment.GetEnvironmentVariable("apikey");
-
-                //client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
-
-
-                //MailMessage msz = new MailMessage(Email, Email)
-                //{
-                //    From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
-                //    Subject = "Reminder for self Collection" + item.CustomerName.ToUpper(),
-
-                //    IsBodyHtml = true,
-                //    Body = " Good Day : " + item.CustomerName.ToUpper() + ", Please find attached order information for order ID : " + item.OrderID,
-
-
-                //};
-                //client.Send(msz);
-
-                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-                var client = new SendGridClient(apiKey);
-                SmtpClient smtp = new SmtpClient("smtp.sendgrid.net", Convert.ToInt32(587));
-                smtp.Host = "smtp.sendgrid.net.com";
-                smtp.Port = 587;
-                MailMessage ms = new MailMessage();
-               
-                var from = new EmailAddress(ConfigurationManager.AppSettings["Email"].ToString());
-                var to = new EmailAddress(User.Identity.Name);
-                var subject = "Reminder to Collect";
-                var plainTextContent = "";
-                var header = "<b>" + "Hi" + ".\n" + item.CustomerName + " " + "We have recieved your payment for the following items :" + "</b>"
-                    + "<br/>" + " <table>" +
-                    "<tr>" +
-                    "<td>" +
-                    " <b> Order Number:</b>" +
-                    "<td>" +
-                    "<td><b>" + item.OrderID + "</b></td>" +
-                    "<tr>";
-                var htmlContent = "";
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, header + htmlContent);
-
-
-                var response = client.SendEmailAsync(msg);
-
-            }
-            //End
-
-            //Self Return
-
-            var selfR = (from i in db.Maps
-                         join
-                         x in db.Orders on i.Id equals x.OrderID
-                         where i.Distance == 0
-                         && x.PickUp == true
-                         && x.Seen == true
-                         && x.DriverID == null
-                         && x.ExpectedReturnDate == DateTime.Today
-                         select x);
-
-            foreach (var item in selfR)
-            {
-                string Email = item.Email;
-                string phone = item.CustomerPhone;
-                SmtpClient client = new SmtpClient("smtp.sendgrid.net");
-                client.Port = 25;
-                client.Host = "smtp.sendgrid.net";
-                client.Timeout = 10000;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-
-                var key = Environment.GetEnvironmentVariable("apikey");
-
-                client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
-
-
-                MailMessage msz = new MailMessage(Email, Email)
+                //Self Collection day before
+                var selfC = (from x in db.Orders
+                             join i in db.Maps
+                             on x.OrderID equals i.orderID
+                             where i.Distance == 0
+                             && x.PickUp == false
+                             && x.Seen == true
+                             && x.DriverID == null
+                             //&& x.CollDate == DateTime.Today
+                             && x.ReminderDate == DateTime.Today
+                             //&& x.CollDate == DateTime.Today.AddDays(-1)
+                             select x);
+                foreach (var item in selfC)
                 {
-                    From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
-                    Subject = "Reminder to return items" + item.CustomerName.ToUpper(),
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
 
-                    IsBodyHtml = true,
-                    Body = " Good Day : " + item.CustomerName.ToUpper() + ", Please find attached order information for order ID : " + item.OrderID,
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
 
 
-                };
-                client.Send(msz);
-
-            }
-
-            //end
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
 
 
-            //Deliver
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
 
-            var info = (from i in db.Maps
-                        join
-                         x in db.Orders on i.Id equals x.OrderID
-                        where/* i.Distance > 0 && */x.Collected == false && x.Delivered == false
-                        && x.CollDate == DateTime.Today.AddDays(-1) && x.DriverID != null
-                        select x);
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
 
-            foreach (var item in info)
-            {
-                string Email = item.Email;
-                string phone = item.CustomerPhone;
-                SmtpClient client = new SmtpClient("smtp.sendgrid.net");
-                client.Port = 25;
-                client.Host = "smtp.sendgrid.net";
-                client.Timeout = 10000;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
 
-                var key = Environment.GetEnvironmentVariable("apikey");
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
 
-                client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
 
 
-                MailMessage msz = new MailMessage(Email, Email)
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForCollection.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+
+
+
+                }
+                //self collection day of
+                var sColl = (from x in db.Orders
+                             join i in db.Maps
+                             on x.OrderID equals i.orderID
+                             where i.Distance == 0
+                             && x.PickUp == false
+                             && x.Seen == true
+                             && x.DriverID == null
+                             && x.CollDate == DateTime.Today
+                             //&& x.ReminderDate == DateTime.Today
+                             select x);
+                foreach (var item in sColl)
                 {
-                    From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
-                    Subject = "Items delivery is scheduled for today" + item.CustomerName.ToUpper(),
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
 
-                    IsBodyHtml = true,
-                    Body = " Good Day : " + item.CustomerName.ToUpper() + ", Please find attached order information for order ID : " + item.OrderID,
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
 
 
-                };
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
 
 
-                client.Send(msz);
-            }
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
 
 
-            //End
 
-            //Return
-            var Return = (from i in db.Maps
-                        join
-                        x in db.Orders on i.Id equals x.OrderID
-                        where/* i.Distance > 0 && */x.Delivered == true && x.Collected == false
-                        && x.ExpectedReturnDate == DateTime.Today && x.DriverID != null
-                        select x);
-
-            foreach (var item in Return)
-            {
-                string Email = item.Email;
-                string phone = item.CustomerPhone;
-                SmtpClient client = new SmtpClient("smtp.sendgrid.net");
-                client.Port = 25;
-                client.Host = "smtp.sendgrid.net";
-                client.Timeout = 10000;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.EnableSsl = true;
-                client.UseDefaultCredentials = false;
-
-                var key = Environment.GetEnvironmentVariable("apikey");
-
-                client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
 
 
-                MailMessage msz = new MailMessage(Email, Email)
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForCollection.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+
+
+                }
+                //End
+
+                //Self Return day before
+
+                var selfR = (from i in db.Maps
+                             join
+                             x in db.Orders on i.Id equals x.OrderID
+                             where i.Distance == 0
+                             && x.PickUp == true
+                             && x.Seen == true
+                             && x.DriverID == null
+                             && x.ExpectedReturnDate == DateTime.Today.AddDays(-1)
+                             select x) ;
+
+                foreach (var item in selfR)
                 {
-                    From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
-                    Subject = "Items Retrieval is scheduled for today " + item.CustomerName.ToUpper(),
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
 
-                    IsBodyHtml = true,
-                    Body = " Good Day : " + item.CustomerName.ToUpper() + ", Please find attached order information for order ID : " + item.OrderID,
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
 
 
-                };
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
 
 
-                client.Send(msz);
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
 
 
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForReturn.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+
+                }
+                //self return today
+                var selfRe = (from i in db.Maps
+                             join
+                             x in db.Orders on i.Id equals x.OrderID
+                             where i.Distance == 0
+                             && x.PickUp == true
+                             && x.Seen == true
+                             && x.DriverID == null
+                             && x.ExpectedReturnDate == DateTime.Today
+                             select x);
+
+                foreach (var item in selfRe)
+                {
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
+
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+
+
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
+
+
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
+
+
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForReturnToday.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+
+                }
+                //end
+
+
+                //Deliver
+
+                var info = (from i in db.Maps
+                            join
+                             x in db.Orders on i.Id equals x.OrderID
+                            where/* i.Distance > 0 && */x.Collected == false && x.Delivered == false
+                            && x.CollDate == DateTime.Today.AddDays(-1) && x.DriverID != null
+                            select x);
+
+                foreach (var item in info)
+                {
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
+
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+
+
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
+
+
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
+
+
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForDelivery.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                var infos = (from i in db.Maps
+                            join
+                             x in db.Orders on i.Id equals x.OrderID
+                             where i.Distance > 0 && x.Collected == false && x.Delivered == false
+                            && x.CollDate == DateTime.Today && x.DriverID != null
+                            select x);
+
+                foreach (var item in infos)
+                {
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
+
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+
+
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
+
+
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
+
+
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForDeliveryToday.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+
+                //End
+
+                //Return day before
+                var Return = (from i in db.Maps
+                              join
+                              x in db.Orders on i.Id equals x.OrderID
+                              where i.Distance > 0 && x.Delivered == true && x.Collected == false
+                              && x.ExpectedReturnDate == DateTime.Today.AddDays(-1) && x.DriverID != null
+                              select x);
+
+                foreach (var item in Return)
+                {
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
+
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+
+
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
+
+
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
+
+
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForDriverCollection.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+                   
+
+
+                    }
+                var Returns = (from i in db.Maps
+                               join
+                               x in db.Orders on i.Id equals x.OrderID
+                               where i.Distance > 0 && x.Delivered == true && x.Collected == false
+                               && x.ExpectedReturnDate == DateTime.Today && x.DriverID != null
+                               select x);
+
+                foreach (var item in Returns)
+                {
+                    string Email = item.Email;
+                    string phone = item.CustomerPhone;
+                    MemoryStream memoryStream = new MemoryStream();
+                    //start of css 
+                    try
+                    {
+                        StringBuilder status = new StringBuilder("");
+                        var doc = new iTextSharp.text.Document(PageSize.A4, 10, 10, 10, 10);
+                        PdfWriter writer = PdfWriter.GetInstance(doc, memoryStream);
+                        var titleFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                        var titleFontBlue = FontFactory.GetFont("Arial", 14, Font.NORMAL, BaseColor.BLUE);
+                        var boldTableFont = FontFactory.GetFont("Arial", 8, Font.BOLD);
+                        var bodyFont = FontFactory.GetFont("Arial", 8, Font.NORMAL);
+                        var EmailFont = FontFactory.GetFont("Arial", 8, Font.NORMAL, BaseColor.BLUE);
+                        BaseColor TabelHeaderBackGroundColor = WebColors.GetRGBColor("#EEEEEE");
+
+                        //end of css
+
+                        //start of header
+
+                        Rectangle pageSize = writer.PageSize;
+                        doc.Open();
+                        PdfPTable header = new PdfPTable(3);
+                        header.HorizontalAlignment = 0;
+                        header.WidthPercentage = 100;
+                        header.SetWidths(new float[] { 100f, 320f, 100f });
+                        header.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        //Image logo = Image.GetInstance(System.Web.HttpContext.Current.Server.MapPath("~/Content/images/1.jpg"));
+                        //string imageURL = System.Web.HttpContext.Current.Server.MapPath("~/Content/Images/GP_BLUE.jpg") ;
+                        //iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(imageURL);
+
+                        //logo.ScaleToFit(100, 100);
+                        {
+                            PdfPCell pdfCelllogo = new PdfPCell(/*logo*/);
+                            pdfCelllogo.Border = Rectangle.NO_BORDER;
+                            pdfCelllogo.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            pdfCelllogo.BorderWidthBottom = 1f;
+                            header.AddCell(pdfCelllogo);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            header.AddCell(middlecell);
+                        }
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Gold Pride", titleFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("90 street, Durban, SA,", bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("(082) 0798501", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase("dalphene@gmail.com", EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            header.AddCell(nesthousing);
+                        }
+                        PdfPTable Invoicetable = new PdfPTable(3);
+                        Invoicetable.HorizontalAlignment = 0;
+                        Invoicetable.WidthPercentage = 100;
+                        Invoicetable.SetWidths(new float[] { 100f, 320f, 100f });  // then set the column's __relative__ widths
+                        Invoicetable.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                        {
+
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Delivery Scheduled for: " + item.CustomerName, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Customer Phone " + item.CustomerPhone, bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" " + item.Email, EmailFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+                        {
+                            PdfPCell middlecell = new PdfPCell();
+                            middlecell.Border = Rectangle.NO_BORDER;
+                            middlecell.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            middlecell.BorderWidthBottom = 1f;
+                            Invoicetable.AddCell(middlecell);
+                        }
+
+                        {
+                            PdfPTable nested = new PdfPTable(1);
+                            nested.DefaultCell.Border = Rectangle.NO_BORDER;
+                            PdfPCell nextPostCell1 = new PdfPCell(new Phrase("Order ID: " + item.OrderID, bodyFont));
+                            nextPostCell1.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell1);
+
+                            PdfPCell nextPostCell2 = new PdfPCell(new Phrase("Date of payment: " + item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss"), bodyFont));
+                            nextPostCell2.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell2);
+
+                            PdfPCell nextPostCell3 = new PdfPCell(new Phrase("Payment Type:  " + "PayFast", bodyFont));
+                            nextPostCell3.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell3);
+
+                            PdfPCell nextPostCell4 = new PdfPCell(new Phrase(" ", bodyFont));
+                            nextPostCell4.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell4);
+
+
+                            PdfPCell nextPostCell5 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell5.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell5);
+
+
+                            PdfPCell nextPostCell6 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell6.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell7 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell7.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell7);
+
+                            //PdfPCell nextPostCell6 = new PdfPCell(new Phrase("Collectors Address" + order.CustomerName, bodyFont));
+                            //nextPostCell5.Border = Rectangle.NO_BORDER;
+                            //nested.AddCell(nextPostCell6);
+
+                            PdfPCell nextPostCell8 = new PdfPCell(new Phrase(" " /*+ "\n"*/, bodyFont));
+                            nextPostCell8.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell8);
+
+                            PdfPCell nextPostCell9 = new PdfPCell(new Phrase("", bodyFont));
+                            nextPostCell9.Border = Rectangle.NO_BORDER;
+                            nested.AddCell(nextPostCell9);
+
+
+
+                            nested.AddCell("");
+                            PdfPCell nesthousing = new PdfPCell(nested);
+                            nesthousing.Border = Rectangle.NO_BORDER;
+                            nesthousing.BorderColorBottom = new BaseColor(System.Drawing.Color.Black);
+                            nesthousing.BorderWidthBottom = 1f;
+                            nesthousing.Rowspan = 5;
+                            nesthousing.PaddingBottom = 10f;
+                            Invoicetable.AddCell(nesthousing);
+                        }
+
+
+                        doc.Add(header);
+                        Invoicetable.PaddingTop = 10f;
+
+                        doc.Add(Invoicetable);
+
+                        doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
+                            "Thank you for collecting you order" + "\n" +
+                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "\n" +
+                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
+                            "If this was not you please contact us "
+                            + "\n" + "\n" + "\n" + "\n" +
+                            "Have  a good day " + "\n" +
+                            "Gold Pride"));
+
+                        PdfContentByte cb = new PdfContentByte(writer);
+
+
+                        BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, true);
+                        cb = new PdfContentByte(writer);
+                        cb = writer.DirectContent;
+                        cb.BeginText();
+                        cb.SetFontAndSize(bf, 8);
+                        cb.SetTextMatrix(pageSize.GetLeft(120), 20);
+                        cb.ShowText("Thank you for choosing GoldPride ");
+                        cb.EndText();
+
+                        //Move the pointer and draw line to separate footer section from rest of page
+                        cb.MoveTo(40, doc.PageSize.GetBottom(50));
+                        cb.LineTo(doc.PageSize.Width - 40, doc.PageSize.GetBottom(50));
+                        cb.Stroke();
+
+                        writer.CloseStream = false;
+                        doc.Close();
+
+                        memoryStream.Position = 0;
+
+
+                        SmtpClient client = new SmtpClient("smtp.sendgrid.net");
+                        client.Port = 25;
+                        client.Host = "smtp.sendgrid.net";
+                        client.Timeout = 10000;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.EnableSsl = true;
+                        client.UseDefaultCredentials = false;
+
+                        var key = Environment.GetEnvironmentVariable("apikey");
+
+                        client.Credentials = new NetworkCredential("apikey", key/*, user, password*/);
+
+                        System.Net.Mail.Attachment attachment;
+                        attachment = new System.Net.Mail.Attachment(memoryStream, "ReminderForcollectionToday.pdf");
+                        MailMessage msz = new MailMessage(Email, Email)
+                        {
+                            From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString()),
+                            Subject = "Order reminder for  " + item.CustomerName.ToUpper(),
+
+                            IsBodyHtml = true,
+                            Body = " Good Day : " + item.CustomerName.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.OrderID,
+                        };
+                        msz.Attachments.Add(attachment);
+
+                        client.Send(msz);
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                    //end
+                }
+            catch
+            {
 
             }
-            //end
+
         }
         
     }

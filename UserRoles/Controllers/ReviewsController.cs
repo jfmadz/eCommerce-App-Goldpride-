@@ -13,51 +13,86 @@ using UserRoles.Models;
 using System.Web.Helpers;
 using Quartz;
 
+
 namespace UserRoles.Controllers
 {
    //[Authorize]
     public class ReviewsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        public ActionResult ChartPie()
+        {
 
-        //public ActionResult ChartPie()
-        //{
-        //    ArrayList xValue = new ArrayList();
-        //    ArrayList yValue = new ArrayList();
-        //    var poor = (from i in db.Reviews
-        //               where i.Rating == "Poor"
-        //               select i).Count();
-        //    var res = (from i in db.Reviews
-        //               where i.Rating == "Good"
-        //               select i ).Count();
-        //    var result = (from i in db.Reviews
-        //                  where i.Rating == "Excellent"
-                        
-        //                  select i).Count();
+            ArrayList xValue = new ArrayList();
+            ArrayList yValue = new ArrayList();
+            var poor = (from i in db.Reviews
+                        where i.Rating == "Poor"
+                        select i.Rating).Count();
+            var res = (from i in db.Reviews
+                       where i.Rating == "Good"
+                       select i.Rating).Count();
+            var result = (from i in db.Reviews
+                          where i.Rating == "Excellent"
 
-        //    var names = (from i in db.Reviews
-                          
+                          select i).Count();
 
-        //                  select i);
-        //    result.ToString().ToList().ForEach(rs => yValue.Add(result));
-        //    res.ToString().ToList().ForEach(rs => yValue.Add(res));
-        //    poor.ToString().ToList().ForEach(rs => yValue.Add(poor));
-        //    //result.ToString().ToList().ForEach(rs => xValue.Add(result));
-        //    //res.ToString().ToList().ForEach(rs => xValue.Add(result));
-        //    //poor.ToString().ToList().ForEach(rs => xValue.Add(poor));
-        //    names.ToList().ForEach(rs => xValue.Add(rs.Rating));
+            var test = from i in db.Reviews select i.Rating;
 
 
-        //    new Chart(width: 600, height: 400, theme: ChartTheme.Blue)
-        //        .AddTitle("Chart for Review[Pie Chart]")
-        //        .AddLegend("Summary")
-        //        .AddSeries("Default", chartType: "Pie", xValue: xValue, yValues: yValue)
-               
-        //        .ToWebImage("bmp");
-                
-            
-        //    return null;
-        //}
+
+            result.ToString().ToList().ForEach(rs => yValue.Add(result));
+            res.ToString().ToList().ForEach(rs => yValue.Add(res));
+            poor.ToString().ToList().ForEach(rs => yValue.Add(poor));
+            //test.ToList().ForEach(rs => xValue.Add(rs.Rating));
+            //test.ToList().ForEach(rs => xValue.Add(rs.Rating));
+            //test.ToList().ForEach(rs => xValue.Add(rs.Rating));
+
+            //result.ToString().ToList().ForEach(rs => xValue.Add(result));
+            //res.ToString().ToList().ForEach(rs => xValue.Add(result));
+            //poor.ToString().ToList().ForEach(rs => xValue.Add(poor));
+
+
+
+            var chart = new Chart(width: 600, height: 400, theme: ChartTheme.Vanilla3D)
+
+                .AddTitle("Chart for Review[Pie Chart]")
+                .AddLegend("Summary")
+                .SetXAxis("Excellent")
+
+                .AddSeries("Default", chartType: "Pie", xValue: new[] { "Excellent", "Good", "Poor" }, yValues: yValue)
+                .Write("bmp");
+
+
+            //return File(chart, "image/bytes");
+
+
+
+
+            return null;
+
+        }
+        public JsonResult Cha()
+        {
+            ArrayList xValue = new ArrayList();
+            ArrayList yValue = new ArrayList();
+            var poor = (from i in db.Reviews
+                        where i.Rating == "Poor"
+                        select i.Rating).Count();
+            var res = (from i in db.Reviews
+                       where i.Rating == "Good"
+                       select i.Rating).Count();
+            var result = (from i in db.Reviews
+                          where i.Rating == "Excellent"
+
+                          select i.Rating).Count();
+
+            var names = (from i in db.Reviews
+
+
+                         select i.Rating);
+          
+            return Json(new { JSONList = poor, res, result, names },JsonRequestBehavior.AllowGet);
+        }
         // GET: Reviews
         public ActionResult Index()
         {

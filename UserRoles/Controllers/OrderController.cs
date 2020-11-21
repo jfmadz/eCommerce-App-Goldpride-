@@ -2597,6 +2597,7 @@ namespace UserRoles.Controllers
 
                 order.MySignature = sig;
                 order.DateDiff = (int?)(((order.ActualReturnDate - order.ExpectedReturnDate).TotalDays * 7 - (order.ExpectedReturnDate.DayOfWeek - order.ActualReturnDate.DayOfWeek) * 2) / 7);
+                order.ReminderDate = order.CollDate.AddDays(-1);
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
                if(Request.IsAuthenticated && User.IsInRole("Driver"))
