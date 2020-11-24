@@ -98,7 +98,7 @@ namespace UserRoles.Controllers
                         bookEvent.FName = Name;
                         bookEvent.LName = SName;
                         bookEvent.Cell = phone;
-
+                        bookEvent.DateOfOrder = DateTime.Now;
                         db.BookEvents.Add(bookEvent);
                         db.SaveChanges();
                         return RedirectToAction("CusIndex", "Packages");

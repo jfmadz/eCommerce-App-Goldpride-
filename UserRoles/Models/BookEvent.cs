@@ -30,6 +30,8 @@ namespace UserRoles.Models
         [Display(Name ="Number of guests")]
         [Range(50, 300)]
         public int Quantity { get; set; }
+        [Display(Name ="Date of Payment")]
+        public DateTime DateOfOrder { get; set; }
         //[Required]
         //[Range(1,500)]
         //public int Quantity { get; set; }
@@ -43,7 +45,8 @@ namespace UserRoles.Models
         [ForeignKey("Location")]
         [Display(Name = "Hall Name")]
         public int locationID { get; set; }
-
+        [Display(Name ="Event Complete")]
+        public bool Completed { get; set; }
         public virtual NumberOfGuests NumberOfGuests { get; set;}
         public virtual Location Location { get; set; }
         public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }

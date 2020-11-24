@@ -1,18 +1,19 @@
-﻿@model UserRoles.Models.ApplicationUser
-@*@model UserRoles.Models.RegisterViewModel*@
+﻿@model UserRoles.Models.RegisterViewModel
 @{
-    ViewBag.Title = "RegisterRole";
+    ViewBag.Title = "Register Role";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
+
+
 <br />
 <br />
 <br />
 <br />
 <br />
 <br />
-<br />
-<br />
-<h2>RegisterRole</h2>
+<h2>Assign a role to a user</h2>
+
+
 @using (Html.BeginForm("RegisterRole", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -22,13 +23,12 @@
     <br />
 
     <hr />
-
+   
     @Html.ValidationSummary("", new { @class = "text- danger" })
     <div class="form-group">
         @Html.Label("Select Username", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @*@Html.DropDownList("Username")*@
-            @Html.DisplayFor(model =>model.UserName)
+            @Html.DropDownList("Username")
         </div>
     </div>
 
@@ -50,17 +50,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+
 <br />
 <br />
 <br />

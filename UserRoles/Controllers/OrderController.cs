@@ -114,6 +114,7 @@ namespace UserRoles.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Obsolete]
         public ActionResult EventEdit([Bind(Include = "ID,FName,CEmail,LName,Cell,Date,Quantity,locationID,Setup")] BookEvent bookEvent)
         {
             if (ModelState.IsValid)

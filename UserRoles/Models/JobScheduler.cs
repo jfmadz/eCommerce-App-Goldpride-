@@ -24,13 +24,13 @@ namespace UserRoles.Models
                 .WithDailyTimeIntervalSchedule
                 (s => s.WithIntervalInHours(24)
                 .OnEveryDay()
-                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(22, 19))
+                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(13, 32))
                 )
                 .Build();
             //ITrigger trigger = TriggerBuilder.Create()
             //  .WithIdentity("trigger1", "group1")
             //  .StartNow()
-            //  .WithSimpleSchedule(x => x.WithIntervalInHours(24)
+            //  .WithSimpleSchedule(x => x.WithIntervalInMinutes(24)
             //  .RepeatForever())
             //  .Build();
 

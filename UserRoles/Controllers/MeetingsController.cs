@@ -18,12 +18,12 @@ namespace UserRoles.Controllers
         public ActionResult Index(string searchString)
         {
             var list = from u in db.Meetings
-                      
+                      orderby u.messageID descending
                        select u;
 
             if ((!string.IsNullOrEmpty(searchString)))
             {
-                list = list.Where(s => s.Date.Contains(searchString));
+                list = (IOrderedQueryable<Meeting>)list.Where(s => s.Date.Contains(searchString));
             }
             //return View(db.Meetings.ToList());
             return View(list.ToList());
@@ -72,7 +72,7 @@ namespace UserRoles.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "messageID,Email,Date,Start,End,Attend,Discussion,CategoryId")] Meeting meeting)
+        public ActionResult Create([Bind(Include = "messageID,Email,Date,Start,End,Attend,Discussion,CategoryId,ckeditor")] Meeting meeting)
         {
             if (ModelState.IsValid)
             {
@@ -109,11 +109,13 @@ namespace UserRoles.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "messageID,Email,Date,Start,End,Attend,Discussion,CategoryId")] Meeting meeting)
+        public ActionResult Edit([Bind(Include = "messageID,Email,Date,Start,End,Attend,Discussion,CategoryId,ckeditor")] Meeting meeting)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(meeting).State = EntityState.Modified;
+                meeting.Start = meeting.Start;
+                meeting.End = meeting.End;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -90,6 +90,10 @@ namespace UserRoles.Models
         public DbSet<PackageVM> PackageVMs { get; set; }
 
         public DbSet<PackageImages> PackageImages { get; set; }
+
+        //public System.Data.Entity.DbSet<UserRoles.Models.ApplicationUser> ApplicationUsers { get; set; }
+
+        //public System.Data.Entity.DbSet<UserRoles.Models.ApplicationUser> ApplicationUsers { get; set; }
         //public System.Data.Entity.DbSet<UserRoles.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

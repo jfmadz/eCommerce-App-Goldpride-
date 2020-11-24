@@ -1,9 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using System.Xml.Linq;
 
 namespace UserRoles.Models
 {
+
+    public class AllUserViewModel
+    {
+        public IdentityUser User { get; set; }
+        public SelectList Roles { get; set; }
+    }
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -92,7 +100,7 @@ namespace UserRoles.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         [UIHint("SignaturePad")]
@@ -114,7 +122,7 @@ namespace UserRoles.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

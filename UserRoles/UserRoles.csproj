@@ -1416,7 +1416,7 @@
     <Content Include="web\fonts\fontawesome-webfont.woff" />
     <Content Include="web\fonts\fontawesome-webfont.woff2" />
     <Content Include="web\fonts\FontAwesome.otf" />
-    <Content Include="Views\Account\RegisterRole.cshtml" />
+    <Content Include="Views\Account\RegisterRoleOld.cshtml" />
     <Content Include="Views\Account\SignUpGuide.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Cal\Client.cshtml" />
@@ -1556,6 +1556,10 @@
     <Content Include="Views\Home\Camera.cshtml" />
     <Content Include="Views\Reviews\ChartPie.cshtml" />
     <Content Include="Views\Reviews\Chart.cshtml" />
+    <Content Include="Views\Account\RegisterRole.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\Details.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

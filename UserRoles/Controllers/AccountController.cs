@@ -12,6 +12,10 @@ using Microsoft.Owin.Security;
 using UserRoles.Models;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Data.Entity;
+using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace UserRoles.Controllers
 {
@@ -201,18 +205,112 @@ namespace UserRoles.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
+
         //
         // new methods
         [AllowAnonymous]
-        [HttpGet]
-        public ActionResult RegisterRole()
+        //public ActionResult Index()
+        //{
+        //    List<AllUserViewModel> modellist = new List<AllUserViewModel>();
+        //    var userManager = new UserManager<IdentityUser, string>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+        //    if (userManager.Users.ToList().Count != 0)
+        //    {
+        //        userManager.Users.ToList().ForEach(u =>
+        //        {
+        //            AllUserViewModel model = new AllUserViewModel();
+        //            model.User = u;
+        //            model.Roles = getallRoles(u.Roles.FirstOrDefault().RoleId);
+        //            modellist.Add(model);
+        //        });
+        //    }
+        //    return View(modellist);
+        //}
+        //public SelectList getallRoles(string selectedRoleId = "1")
+        //{
+        //    return new SelectList(context.Roles.ToList(), "Name", "Name", selectedRoleId);
+        //}
+        public ActionResult Index()
         {
-           
-            
+            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
+            return View(context.Users.ToList());
+
+        }
+        [AllowAnonymous]
+        public ActionResult Details(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser users = context.Users.Find(id);
+            if (users == null)
+            {
+                return HttpNotFound();
+            }
+            return View(users);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser users = context.Users.Find(id);
+            if (users == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
+            return View(users);
+        }
+
+        // POST: Categories/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task <ActionResult> Edit([Bind(Include = "Username,Name,Surname,PhoneNumber,Email,Role,Name,")] RegisterViewModel model, ApplicationUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = context.Users.Where(i => i.UserName == user.UserName).Select(s => s.Id);
+                string updateId = " ";
+                foreach (var i in userId)
+                {
+                    updateId = i.ToString();
+                }
+                await this.UserManager.AddToRoleAsync(updateId, model.Name);
+                //context.Entry(user).State = EntityState.Modified;
+                //context.SaveChanges();
+
+            }
+
+
+            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
+            return RedirectToAction("Index");
+           // return View(user);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult RegisterRole(string id)
+        {
+            //var a = from i in context.Users.ToList();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser users = context.Users.Find(id);
+            if (users == null)
+            {
+                return HttpNotFound();
+            }
+
             ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
             ViewBag.UserName = new SelectList(context.Users.ToList(), "UserName", "UserName");
-            return View();
+            return View(users);
         }
 
         //
@@ -220,16 +318,29 @@ namespace UserRoles.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult>RegisterRole(RegisterViewModel model, ApplicationUser user)
+        public async Task<ActionResult>RegisterRole(RegisterViewModel model, ApplicationUser user,string UserId, string RoleId)
         {
-            var userId = context.Users.Where(i => i.UserName == user.UserName).Select(s => s.Id);
-            string updateId = " ";
-            foreach (var i in userId)
-            {
-                updateId = i.ToString();
-            }
-            await this.UserManager.AddToRoleAsync(updateId, model.Name);
+            //var userId = context.Users.Where(i => i.UserName == user.UserName).Select(s => s.Id);
+            //string updateId = " ";
+            context.Entry(user).State = EntityState.Modified;
+            //foreach (var i in user)
+            //{
+            //    updateId = i.ToString();
+            //}
+            //var olduser = UserManager.FindById(user.Id);
+           
+           await this.UserManager.RemoveFromRoleAsync(user.Id, model.Name);
+            
+            await this.UserManager.AddToRoleAsync(user.Id, model.Name);
             return RedirectToAction("Index", "Home");
+            //var userManager = new UserManager<IdentityUser, string>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+            //var roleManager = new RoleManager<IdentityRole, string>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            //var olduser = userManager.FindById(UserId);
+            //var oldrole = roleManager.FindById(olduser.Roles.FirstOrDefault().RoleId);
+            //var role = roleManager.FindById(RoleId);
+            //userManager.RemoveFromRole(UserId, oldrole.Name);
+            //var result = userManager.AddToRole(UserId, role.Name);
+            //return Json(result.Succeeded, JsonRequestBehavior.AllowGet);
         }
 
         //
