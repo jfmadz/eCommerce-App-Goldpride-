@@ -53,7 +53,7 @@ namespace UserRoles.Controllers
 
 
 
-            var chart = new Chart(width: 600, height: 400, theme: ChartTheme.Vanilla3D)
+            var chart = new Chart(width: 600, height: 400, theme: ChartTheme.Vanilla)
 
                 .AddTitle("Chart for Review[Pie Chart]")
                 .AddLegend("Summary")

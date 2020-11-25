@@ -188,7 +188,7 @@
                     }
                     @if (Request.IsAuthenticated && User.IsInRole("Driver"))
                     {
-
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Camera", "Camera", "Home")</li>
                         <li class="hvr-sweep-to-right">@Html.ActionLink("Delivery", "DDelivery", "DriverVM")</li>
                         <li class="hvr-sweep-to-right">@Html.ActionLink("Collection", "DCollection", "DriverVM")</li>
 

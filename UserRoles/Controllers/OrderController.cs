@@ -433,7 +433,7 @@ namespace UserRoles.Controllers
                     x in db.Orders on i.orderID equals x.OrderID
                     where i.Distance == 0 && x.PickUp==false && x.Seen == true && x.DriverID == null
                      orderby
-                    x.OrderID descending
+                    x.OrderID ascending
                     select x);
 
             if (searchString != null)
@@ -477,7 +477,7 @@ namespace UserRoles.Controllers
                      join
                       x in db.Orders on i.orderID equals x.OrderID
                  where i.Distance > 0 && x.Collected == false && x.Delivered == false
-                     /*&& x.CollDate == DateTime.Today*/ && x.DriverID != null
+                     && x.CollDate == DateTime.Today && x.DriverID != null
                      orderby
                         x.OrderID descending
                      select x);
@@ -546,7 +546,7 @@ namespace UserRoles.Controllers
         {
             
             var list = (from i in db.Orders
-                       
+                       orderby i.OrderID descending
                         select i).Take(5000)/*db.Orders.Take(5000)*/;
             //var search = Convert.ToInt32(search);
 
@@ -2517,7 +2517,7 @@ namespace UserRoles.Controllers
                                 doc.Add(Invoicetable);
 
                                 doc.Add(new Paragraph("GoodDay " + order.CustomerName + "\n" + "\n" +
-                                    "We would like to inform you that we have successfully collected your Order from you" +
+                                    "We would like to inform you that we have successfully collected your Order from you " +
                                      +order.OrderID + "\n" +
                                     "\n" +
                                     "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
@@ -2574,7 +2574,7 @@ namespace UserRoles.Controllers
                                     Body = " Good Day : " + order.CustomerName.ToUpper() + "\n" + ", Please find attached for your order with GoldPride: " + order.OrderID,
                                 };
                                 msz.Attachments.Add(attachment);
-                                 msz.Body = "Please take a moment of your timet to review our services " + "https://2020grp26.azurewebsites.net/Reviews/Create";
+                                 msz.Body = "Please take a moment of your time to review our services " + "https://2020grp26.azurewebsites.net/Reviews/Create";
 
                               client.Send(msz);
     

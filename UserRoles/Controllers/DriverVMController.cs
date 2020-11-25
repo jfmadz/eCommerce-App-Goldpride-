@@ -26,7 +26,7 @@ namespace UserRoles.Controllers
             List<DriverVM> VMlist = new List<DriverVM>();
 
             var col = (from i in db.Maps
-                       join x in db.Orders on i.Id equals x.OrderID
+                       join x in db.Orders on i.orderID equals x.OrderID
                        where i.Distance > 0 && x.Delivered == false 
                        /*&& x.OutForDel == false*/ && x.Collected ==false 
                        && x.Collected == false 
@@ -85,7 +85,7 @@ namespace UserRoles.Controllers
             List<DriverVM> VMlist = new List<DriverVM>();
 
             var col = (from i in db.Maps
-                       join x in db.Orders on i.Id equals x.OrderID
+                       join x in db.Orders on i.orderID equals x.OrderID
                        where x.Delivered == true && x.OutForDel == true
                        && x.DriverID==ID && x.Collected == false
                      
