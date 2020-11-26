@@ -4,7 +4,15 @@
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 <h2>Details</h2>
 
 <div>
@@ -62,12 +70,18 @@
             @Html.DisplayNameFor(model =>model.Roles)
         </dt>
         <dd>
-            @Html.DisplayFor(model =>model.Roles)
+            @Html.Display("Name")
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("RegisterRole", "RegisterRole", new { id = item.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+<br />
+<br />
+<br />
+<br />
+<br />
+

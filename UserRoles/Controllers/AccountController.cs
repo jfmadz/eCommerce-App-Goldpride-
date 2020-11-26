@@ -229,10 +229,16 @@ namespace UserRoles.Controllers
         //{
         //    return new SelectList(context.Roles.ToList(), "Name", "Name", selectedRoleId);
         //}
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
+            var users = from i in context.Users
+                        select i;
+            if ((!string.IsNullOrEmpty(searchString)))
+            {
+                users = users.Where(s => s.Email.Contains(searchString));
+            }
             ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
-            return View(context.Users.ToList());
+            return View(users.ToList());
 
         }
         [AllowAnonymous]
@@ -328,11 +334,58 @@ namespace UserRoles.Controllers
             //    updateId = i.ToString();
             //}
             //var olduser = UserManager.FindById(user.Id);
-           
-           await this.UserManager.RemoveFromRoleAsync(user.Id, model.Name);
-            
+
+            //UserManager.RemoveFromRole(user.Id, model.Name);
+
             await this.UserManager.AddToRoleAsync(user.Id, model.Name);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index" );
+            //var userManager = new UserManager<IdentityUser, string>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+            //var roleManager = new RoleManager<IdentityRole, string>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            //var olduser = userManager.FindById(UserId);
+            //var oldrole = roleManager.FindById(olduser.Roles.FirstOrDefault().RoleId);
+            //var role = roleManager.FindById(RoleId);
+            //userManager.RemoveFromRole(UserId, oldrole.Name);
+            //var result = userManager.AddToRole(UserId, role.Name);
+            //return Json(result.Succeeded, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Remove(string id)
+        {
+            //var a = from i in context.Users.ToList();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser users = context.Users.Find(id);
+            if (users == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Name = new SelectList(context.Roles.ToList(), "Name", "Name");
+            ViewBag.UserName = new SelectList(context.Users.ToList(), "UserName", "UserName");
+            return View(users);
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Remove(RegisterViewModel model, ApplicationUser user, string UserId, string RoleId)
+        {
+            //var userId = context.Users.Where(i => i.UserName == user.UserName).Select(s => s.Id);
+            //string updateId = " ";
+            context.Entry(user).State = EntityState.Modified;
+            //foreach (var i in user)
+            //{
+            //    updateId = i.ToString();
+            //}
+            //var olduser = UserManager.FindById(user.Id);
+
+            UserManager.RemoveFromRole(user.Id, model.Name);
+
+            //await this.UserManager.AddToRoleAsync(user.Id, model.Name);
+            //return RedirectToAction("Index");
+            return RedirectToAction("Index");
             //var userManager = new UserManager<IdentityUser, string>(new UserStore<IdentityUser>(new ApplicationDbContext()));
             //var roleManager = new RoleManager<IdentityRole, string>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
             //var olduser = userManager.FindById(UserId);

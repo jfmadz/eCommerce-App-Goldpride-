@@ -12,8 +12,8 @@
 <br />
 <br />
 <br />
-<h2>RegisterRole</h2>
-@using (Html.BeginForm("RegisterRole", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+<h2>Remove </h2>
+@using (Html.BeginForm("Remove", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <br />
@@ -25,16 +25,16 @@
 
     @Html.ValidationSummary("", new { @class = "text- danger" })
     <div class="form-group">
-        @Html.Label("Select Username", new { @class = "col-md-2 control-label" })
+        @Html.Label(" Username", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @*@Html.DropDownList("Username")*@
-            @Html.DisplayFor(model =>model.UserName)
+            @Html.DisplayFor(model => model.UserName)
         </div>
     </div>
 
     <!--Select the role type for the user-->
     <div class="form-group">
-        @Html.Label("Select Role to assign", new { @class = "col-md-2 control-label" })
+        @Html.Label("Select Role to unassign", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownList("Name")
         </div>
@@ -43,8 +43,8 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn-default" value="Register" />
-            @Html.ActionLink("Remove", "Remove", "Account")
-            
+            @*@Html.ActionLink("Remove", "Remove", "Account")*@
+
         </div>
     </div>
 

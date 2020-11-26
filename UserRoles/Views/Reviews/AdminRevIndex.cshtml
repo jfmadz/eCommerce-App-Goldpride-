@@ -46,37 +46,42 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Rating)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.servRating)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.useService)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.recommend)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Comment)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.isActive)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
-        @*@Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.CommentID })*@
-    </td>
-</tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.servRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.useService)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.recommend)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isActive)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
+                @*@Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.CommentID })*@
+            </td>
+        </tr>
     }
 
+
 </table>
+<div>
+    <img src="@Url.Action("ChartPie")" alt="Chart" />
+
+</div>
 <br />
 <br />
 <br />
