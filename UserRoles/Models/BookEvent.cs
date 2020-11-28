@@ -32,6 +32,8 @@ namespace UserRoles.Models
         public int Quantity { get; set; }
         [Display(Name ="Date of Payment")]
         public DateTime DateOfOrder { get; set; }
+        public DateTime ReminderDayBefore { get; set; }
+        public DateTime Reminder { get; set; }
         //[Required]
         //[Range(1,500)]
         //public int Quantity { get; set; }

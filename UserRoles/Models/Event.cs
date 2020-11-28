@@ -29,6 +29,10 @@ namespace UserRoles.Models
         [DisplayName("End")]
         public System.DateTime End { get; set; }
 
+        public DateTime MReminder { get; set; }
+
+        public DateTime Reminder { get; set; }
+
         [Required]
         [Phone]
         [DisplayName("Tel No.")]

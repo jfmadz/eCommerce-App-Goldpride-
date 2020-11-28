@@ -56,7 +56,7 @@ namespace UserRoles.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Obsolete]
-        public ActionResult Client([Bind(Include = "EventId,EventType,Fname,Start,End,contactNum,Email")] Event eve)
+        public ActionResult Client([Bind(Include = "EventId,EventType,Fname,Start,End,contactNum,Email,MReminder,Reminder")] Event eve)
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -80,7 +80,8 @@ namespace UserRoles.Controllers
 
                     if (ModelState.IsValid)
                     {
-
+                        eve.MReminder = eve.Start.Date.AddDays(-1);
+                        eve.Reminder = eve.Start.Date;
                         db.Events.Add(eve);
                         db.SaveChanges();
 

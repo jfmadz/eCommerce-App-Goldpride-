@@ -185,6 +185,7 @@ namespace UserRoles.Controllers
                         order.OrderDate = DateTime.Now;
                         order.ExpectedReturnDate = order.CollDate.AddDays(2);
                         order.PaymentType = "PayFast";
+                        order.SelfReturnReminder = order.ExpectedReturnDate.AddDays(-1);
                         order.ReminderDate = order.CollDate.AddDays(-1);
                         db.Orders.Add(order);
                         db.SaveChanges();

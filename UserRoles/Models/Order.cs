@@ -74,7 +74,10 @@ namespace UserRoles.Models
 
         [Display(Name ="Actual Date of Return")]
         public System.DateTime ActualReturnDate { get; set; }
-        public DateTime ReminderDate { get; set; }
+
+        public DateTime ReminderDate { get; set; }//Collection
+
+        public DateTime SelfReturnReminder { get; set; }
 
         [Display(Name ="Number of days late")]
         public int? DateDiff { get; set; }

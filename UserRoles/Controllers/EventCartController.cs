@@ -99,6 +99,8 @@ namespace UserRoles.Controllers
                         bookEvent.LName = SName;
                         bookEvent.Cell = phone;
                         bookEvent.DateOfOrder = DateTime.Now;
+                        bookEvent.ReminderDayBefore = bookEvent.Date.AddDays(-1);
+                        bookEvent.Reminder = bookEvent.Date.Date;
                         db.BookEvents.Add(bookEvent);
                         db.SaveChanges();
                         return RedirectToAction("CusIndex", "Packages");
