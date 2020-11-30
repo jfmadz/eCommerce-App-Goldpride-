@@ -658,7 +658,7 @@ namespace UserRoles.Controllers
 
                 QRCodeGenerator ObjQr = new QRCodeGenerator();
 
-                qr.Message = "2020grp26.azurewebsites.net/Order/Details/"+ order.OrderID;
+                qr.Message = "https://2020grp26.azurewebsites.net/Order/Details/"+ order.OrderID;
 
                 QRCodeData qrCodeData = ObjQr.CreateQrCode(qr.Message, QRCodeGenerator.ECCLevel.Q);
 
@@ -779,8 +779,8 @@ namespace UserRoles.Controllers
             onceOffRequest.confirmation_address = "sbtu01@payfast.co.za";
 
             var redirectUrl = $"{this.payFastSettings.ProcessUrl}{onceOffRequest.ToString()}";
-            return View("OrderSuccess");
-            //return Redirect(redirectUrl);
+            //return View("OrderSuccess");
+            return Redirect(redirectUrl);
         }
         [HttpPost]
         public async Task<ActionResult> Notify([ModelBinder(typeof(PayFastNotifyModelBinder))] PayFastNotify payFastNotifyViewModel)

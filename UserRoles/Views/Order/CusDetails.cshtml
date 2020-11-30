@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "CusDetails";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
 
 }
@@ -26,7 +26,7 @@
 <br />
 <head>
     <meta charset="utf-8">
-    <title>A simple, clean, and responsive HTML invoice template</title>
+   
 
     <style>
     .invoice-box {
@@ -41,50 +41,21 @@
         color: #555;
     }
 
-<<<<<<< HEAD
+
         .flex-container > div {
             /*background-color: #f1f1f1;*/
             margin: 80px;
             padding: 90px;
             font-size: 10px;
         }
-</style>
-<head>
 
 
-    <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
-
-    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
-
-</head>
-
-<h2 style="font-family:Roboto">Customer Order Details</h2>
-
-<div>
-    <h4 style="font-family:Roboto">Order</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderID)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OrderID)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MySignature)
-        </dt>
-        <dd>
-
-            @try
-            {
-=======
     .invoice-box table {
         width: 100%;
         line-height: inherit;
         text-align: left;
     }
->>>>>>> 6b01de52c3f95b734161f70ee685fb870929b197
+
 
     .invoice-box table td {
         padding: 5px;
@@ -95,97 +66,12 @@
         text-align: right;
     }
 
-<<<<<<< HEAD
-            }
-            catch
-            {
-                @*if (item.Image == null)
-                    {
-                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                    }*@
-            }
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.OrderDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PaymentType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PaymentType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerPhone)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerPhone)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CollDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CollDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ExpectedReturnDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ExpectedReturnDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActualReturnDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ActualReturnDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ConSig)
-        </dt>
-        <dd>
-
-            @try
-            {
-=======
+          
     .invoice-box table tr.top table td {
         padding-bottom: 20px;
     }
->>>>>>> 6b01de52c3f95b734161f70ee685fb870929b197
+
 
     .invoice-box table tr.top table td.title {
         font-size: 45px;
@@ -197,23 +83,16 @@
         padding-bottom: 40px;
     }
 
-<<<<<<< HEAD
+
             }
-            catch
-            {
-                @*if (item.Image == null)
-                    {
-                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                    }*@
-            }
-        </dd>
-=======
+           
+   
     .invoice-box table tr.heading td {
         background: #eee;
         border-bottom: 1px solid #ddd;
         font-weight: bold;
     }
->>>>>>> 6b01de52c3f95b734161f70ee685fb870929b197
+
 
     .invoice-box table tr.details td {
         padding-bottom: 20px;
@@ -227,121 +106,8 @@
         border-bottom: none;
     }
 
-<<<<<<< HEAD
-            <dd>
-                @Html.DisplayFor(model => model.DriverID)
-            </dd>
-        }
-    </dl>
 
-
-</div>
-<dl class="flex-container">
-    <dt>
-        @Html.DisplayNameFor(model => model.Seen)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.Seen)
-    </dd>
-
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.PickUp)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.PickUp)
-    </dd>
-
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.OutForDel)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.OutForDel)
-    </dd>
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.Delivered)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.Delivered)
-    </dd>
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.Returned)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.Returned)
-    </dd>
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.OutForCol)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.OutForCol)
-    </dd>
-    <dt style="padding-left:5%">
-        @Html.DisplayNameFor(model => model.Collected)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.Collected)
-    </dd>
-</dl>
-<body>
-    <div class="outer-w3-agile mt-3">
-        <h4 class="tittle-w3-agileits mb-4"></h4>
-        <table class="table table-bordered table-responsive">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Sub Total</th>
-                </tr>
-                @foreach (var item in Model.OrderDetail)
-                {
-                    <tr>
-                        <td>@item.ItemsHire.ProductName</td>
-
-                        <td>@item.ItemsHire.Price.ToString("C")</td>
-                        <td>@item.Quantity</td>
-                        <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
-                    </tr>
-
-                    @*<tr>
-                            <td colspan="3">Deposit:</td>
-                            <td>
-
-                                @item.Deposit.ToString("C")
-                            </td>
-                        </tr>*@
-                    <tr>
-                        <td colspan="3">Total:</td>
-                        <td>
-
-                            @item.Total.ToString("C")
-                        </td>
-                    </tr>
-
-
-
-                    @*<tr>
-                            <td>@item.ItemsHire.ProductName</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Price.ToString("C")</td>
-                            <td>@item.Total.ToString("C")</td>
-                            <td>@item.Deposit.ToString("C")</td>
-
-
-                        </tr>*@
-                }
-
-        </table>
-        </div>
-</body>
-=======
+         
     .invoice-box table tr.total td:nth-child(2) {
         border-top: 2px solid #eee;
         font-weight: bold;
@@ -352,7 +118,10 @@
             width: 100%;
             display: block;
             text-align: center;
-        }
+        
+                                           }
+                                           }
+        
 
         .invoice-box table tr.information table td {
             width: 100%;
@@ -438,7 +207,7 @@
                 </table>
             </td>
         </tr>*@
->>>>>>> 6b01de52c3f95b734161f70ee685fb870929b197
+
 
             <tr class="heading">
                 <td>

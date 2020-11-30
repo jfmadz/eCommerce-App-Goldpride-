@@ -858,10 +858,10 @@ span {
 
 /*-- banner-text --*/
 .header-w3layouts {
-    position: absolute;
+    position: fixed;
     top: 0;
     z-index: 99;
-    text-align: center;
+    text-align: ;
     left: 0;
     width: 100%;
 }

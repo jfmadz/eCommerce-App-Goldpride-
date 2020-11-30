@@ -3932,12 +3932,12 @@ tbody.collapse.show {
 .tab-content > .active {
   display: block;
 }
-
+/*
 .navbar {
-  position: relative;
+  position: fixed;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex;
+  display:;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -webkit-box-align: center;
@@ -4424,7 +4424,7 @@ tbody.collapse.show {
 .navbar-dark .navbar-text a:hover, .navbar-dark .navbar-text a:focus {
   color: #fff;
 }
-
+*/
 .card {
   position: relative;
   display: -webkit-box;

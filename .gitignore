@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/UserRoles/Properties/ServiceDependencies/2020grp26 - Web Deploy
+/UserRoles/Properties/serviceDependencies.2020grp26 - Web Deploy.json

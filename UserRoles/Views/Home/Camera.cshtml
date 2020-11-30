@@ -20,12 +20,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JQuery HTML5 QR Code Scanner using Instascan JS Example - ItSolutionStuff.com</title>
+    <title>Scanner</title>
 
 </head>
 <body>
 
-    <h1>JQuery HTML5 QR Code Scanner using Instascan JS Example - ItSolutionStuff.com</h1>
+    @*<h1>JQuery HTML5 QR Code Scanner using Instascan JS Example - ItSolutionStuff.com</h1>*@
 
     <video id="preview"></video>
 
@@ -40,7 +40,7 @@
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             alert(content);
-            window.open(content);
+            window.open( content);
         });
         Instascan.Camera.getCameras().then(function (cameras) {
             if (cameras.length > 0) {
