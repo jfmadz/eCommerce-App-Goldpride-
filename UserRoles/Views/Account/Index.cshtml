@@ -12,128 +12,80 @@
 <br />
 <br />
 <br />
-<h2>Index</h2>
-<form asp-controller="Account" asp-action="Index">
 
+@Html.ActionLink("Create Role", "Create", "Role")
 
-    <p>You may search by Email</p>
-    <input type="text" name="SearchString" />
-    <input type="submit" value="Filter" />
+<head>
 
+   
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="css" media="all" />
+    
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" media="all" />
+   
 
-
+</head>
+<h2 style="font-family:Roboto">Role Management</h2>
+<form asp-controller="Account" asp-action="Index" class="form-inline mx-auto search-form">
+    <input class="form-control mr-sm-2" type="text" name="SearchString" placeholder="Search" aria-label="SearchString" @*required=""*@>
+    <button class="btn btn-style my-2 my-sm-0" type="submit">Search</button>
 </form>
-@*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Surname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        @*<th>
-                @Html.DisplayNameFor(model => model.MySignature)
-            </th>*@
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        @*<th>
-                @Html.DisplayNameFor(model => model.EmailConfirmed)
-            </th>*@
-        @*<th>
-                @Html.DisplayNameFor(model => model.PasswordHash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SecurityStamp)
-            </th>*@
-        @*<th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>*@
-        @*<th>
-                @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TwoFactorEnabled)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LockoutEnabled)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccessFailedCount)
-            </th>*@
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Roles)
-        </th>
-        <th></th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.MySignature)
-                </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PasswordHash)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SecurityStamp)
-                </td>*@
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>*@
-            @*<td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LockoutEndDateUtc)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LockoutEnabled)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AccessFailedCount)
-                </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            @*<td>
-                @Html.Display("Name")
-            </td>*@
-            <td>
-                @*<button class="updatebutton">update</button>*@ 
-                @Html.ActionLink("RegisterRole", "RegisterRole", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Remove", "Remove", new { id = item.Id })
-            </td>
-        </tr>
-    }
 
-</table>
+<body>
+
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.Surname)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.Name)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.UserName)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+
+
+                    <th></th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.Surname</th>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.Name</th>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.UserName</th>
+
+
+                        <td>
+                            @Html.ActionLink("RegisterRole", "RegisterRole", new { id = item.Id }) |<br />
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |<br />
+                            @Html.ActionLink("Remove", "Remove", new { id = item.Id })
+
+
+                        </td>
+
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+
 
 <br />
 <br />
@@ -143,4 +95,5 @@
 <br />
 
 <br />
-<br /><br />
+<br />
+<br />

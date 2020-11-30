@@ -28,7 +28,7 @@
         @Html.Label("Select Username", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @*@Html.DropDownList("Username")*@
-            @Html.DisplayFor(model =>model.UserName)
+            @Html.DisplayFor(model => model.UserName)
         </div>
     </div>
 
@@ -43,11 +43,13 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn-default" value="Register" />
-            @Html.ActionLink("Remove", "Remove", "Account")
-            
+
+
         </div>
     </div>
-
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
