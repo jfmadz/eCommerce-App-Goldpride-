@@ -1647,6 +1647,8 @@
     <Content Include="tables\webfonts\fa-solid-900.ttf" />
     <Content Include="tables\webfonts\fa-solid-900.woff" />
     <Content Include="tables\webfonts\fa-solid-900.woff2" />
+    <Content Include="Views\Order\Collectnew.cshtml" />
+    <Content Include="Views\Order\DeliveryNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

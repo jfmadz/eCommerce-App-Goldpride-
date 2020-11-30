@@ -1,0 +1,128 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserRoles.Models.Order>
+@{
+    ViewBag.Title = "DeliveryNew";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<head>
+
+
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="text" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 style="font-family:Roboto">New Delivery Orders</h2>
+
+
+
+<form asp-controller="Order" asp-action="DeliveryNew" class="form-inline mx-auto search-form">
+
+
+    <p>You may search by Order ID</p>
+    <input class="form-control mr-sm-2" aria-label="SearchString" type="text" name="SearchString" />
+    <input class="btn btn-style my-2 my-sm-0" type="submit" value="Filter" />
+
+
+
+</form>
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        Order ID
+                    </th>
+                    <th scope="col">
+                        Order Date
+                    </th>
+                    <th scope="col">
+                        Payment Type
+                    </th>
+
+                    <th scope="col">
+                        Customer Name
+                    </th>
+                    <th scope="col">
+                        Customer Surname
+                    </th>
+                    <th scope="col">
+                        Customer Phone
+                    </th>
+                    <th scope="col">
+                        Email
+                    </th>
+
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderDate)
+                            @*@, @item.OrderDate)*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentType)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+
+                        <td>
+
+                            @*@Html.ActionLink("Details", "Details", new { id = item.OrderID }) |*@
+                            @Html.ActionLink("Details", "Cusdetails", new { id = item.OrderID }) |
+
+
+                        </td>
+                    </tr>
+                }
+
+        </table>
+    </div>
+</body>
+@Html.PagedListPager(Model, page => Url.Action("Collectnew", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+  new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
