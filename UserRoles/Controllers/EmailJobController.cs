@@ -233,12 +233,13 @@ namespace UserRoles.Controllers
                         Invoicetable.PaddingTop = 10f;
 
                         doc.Add(Invoicetable);
+                        Order order = new Order();
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder for you to collect order" + "\n" +
+                            "tomorrow" + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -745,10 +746,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that you need to retrurn your items:" + "\n" +
+                            "Tomorrow " + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -997,10 +998,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "Thank you for returning your items for order" + "\n" +
+                            "Items Returned at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -1251,10 +1252,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that you have opted for delivery" + "\n" +
+                            "Delivery of Items will be tomorrow" + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -1500,10 +1501,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "Your Items have been delivered successfully" + "\n" +
+                            "Items Delivered at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            "Please note that they will be collected at " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -1753,10 +1754,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that your items will be collected tommorrow" + "\n" +
+                            "Items Collected date" + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -2005,10 +2006,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.CustomerName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
+                            "Your Items have been successfully collected" + "\n" +
                             "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
+                            //"Please note that they need to be returned by the " + item.ExpectedReturnDate.ToString("dd/MM?yyyy") +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -2253,10 +2254,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.FName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that you have an event tommorrow" + "\n" +
+                            "Event Date" + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " +
+                            //"Please note that they need to be returned by the " +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -2497,10 +2498,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.FName + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "Today is the day of your event" + "\n" +
+                            "Date " + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " +
+                            //"Please note that they need to be returned by the " +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -2741,10 +2742,10 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.Fname + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that you have an appointment tomorrow" + "\n" +
+                            "Date" + DateTime.Now.AddDays(1).ToString("dd/MM/yyyy HH:mm") + "\n" +
                             "\n" +
-                            "Please note that they need to be returned by the " +
+                            //"Please note that they need to be returned by the " +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
                             "If this was not you please contact us "
                             + "\n" + "\n" + "\n" + "\n" +
@@ -2984,8 +2985,8 @@ namespace UserRoles.Controllers
                         doc.Add(Invoicetable);
 
                         doc.Add(new Paragraph("GoodDay " + item.Fname + "\n" + "\n" +
-                            "Thank you for collecting you order" + "\n" +
-                            "Items Collected at" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "\n" +
+                            "This is a reminder that you have an appoinment today" + "\n" +
+                            "Date" + DateTime.Now.ToString("dd/MM/yyyy HH:mm") +item.Start.ToShortTimeString()+ "\n" +
                             "\n" +
                             "Please note that they need to be returned by the " +
                             "Thank you for using GoldPride for your item needs and we hope to see you again" + "\n" +
