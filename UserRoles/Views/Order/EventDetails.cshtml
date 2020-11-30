@@ -12,6 +12,14 @@
 {
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
+<head>
+
+
+    <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
 <br />
 <br />
 <br />
@@ -24,10 +32,10 @@
 <br />
 <br />
 
-<h2>EventDetails</h2>
+<h2 style="font-family:Roboto">EventDetails</h2>
 
 <div>
-    <h4>BookEvent</h4>
+    <h4 style="font-family:Roboto">BookEvent</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -96,51 +104,58 @@
 
     </dl>
 </div>
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Sub Total</th>
-    </tr>
-    @foreach (var item in Model.EventOrderDetails)
-    {
-        <tr>
-            <td>@item.Package.packageName</td>
 
-            <td>@item.Package.Price.ToString("C")</td>
-            <td>@item.Quantity</td>
-            <td>@(( item.Quantity * item.Price).ToString("C"))</td>
-        </tr>
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Sub Total</th>
+                </tr>
+                @foreach (var item in Model.EventOrderDetails)
+                {
+                    <tr>
+                        <td>@item.Package.packageName</td>
 
-        <tr>
-            <td colspan="3">Deposit:</td>
-            <td>
+                        <td>@item.Package.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@(( item.Quantity * item.Price).ToString("C"))</td>
+                    </tr>
 
-                @item.Deposit.ToString("C")
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">Total:</td>
-            <td>
+                    <tr>
+                        <td colspan="3">Deposit:</td>
+                        <td>
 
-                @item.Total.ToString("C")
-            </td>
-        </tr>
+                            @item.Deposit.ToString("C")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Total:</td>
+                        <td>
 
-
-
-        @*<tr>
-                <td>@item.ItemsHire.ProductName</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
-                <td>@item.Deposit.ToString("C")</td>
+                            @item.Total.ToString("C")
+                        </td>
+                    </tr>
 
 
-            </tr>*@
-    }
-</table>
+
+                    @*<tr>
+                            <td>@item.ItemsHire.ProductName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.Total.ToString("C")</td>
+                            <td>@item.Deposit.ToString("C")</td>
+
+
+                        </tr>*@
+                }
+        </table>
+    </div>
+</body>
 <p>
     @*@Html.ActionLink("Edit", "EventEdit", new { id = Model.ID }) |*@
     @Html.ActionLink("Back to List", "UpComingEvents")

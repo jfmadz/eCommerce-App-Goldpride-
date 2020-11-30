@@ -37,11 +37,19 @@
             font-size: 10px;
         }
 </style>
+<head>
 
-<h2>Customer Order Details</h2>
+
+    <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+
+<h2 style="font-family:Roboto">Customer Order Details</h2>
 
 <div>
-    <h4>Order</h4>
+    <h4 style="font-family:Roboto">Order</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -68,9 +76,9 @@
             catch
             {
                 @*if (item.Image == null)
-                {
-                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                }*@
+                    {
+                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                    }*@
             }
         </dd>
         <dt>
@@ -159,9 +167,9 @@
             catch
             {
                 @*if (item.Image == null)
-                {
-                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                }*@
+                    {
+                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                    }*@
             }
         </dd>
 
@@ -234,52 +242,58 @@
         @Html.DisplayFor(model => model.Collected)
     </dd>
 </dl>
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Sub Total</th>
-    </tr>
-    @foreach (var item in Model.OrderDetail)
-    {
-        <tr>
-            <td>@item.ItemsHire.ProductName</td>
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Sub Total</th>
+                </tr>
+                @foreach (var item in Model.OrderDetail)
+                {
+                    <tr>
+                        <td>@item.ItemsHire.ProductName</td>
 
-            <td>@item.ItemsHire.Price.ToString("C")</td>
-            <td>@item.Quantity</td>
-            <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
-        </tr>
+                        <td>@item.ItemsHire.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
+                    </tr>
 
-        @*<tr>
-            <td colspan="3">Deposit:</td>
-            <td>
-               
-                @item.Deposit.ToString("C")
-            </td>
-        </tr>*@
-        <tr>
-            <td colspan="3">Total:</td>
-            <td>
-                
-                @item.Total.ToString("C")
-            </td>
-        </tr>
+                    @*<tr>
+                            <td colspan="3">Deposit:</td>
+                            <td>
 
+                                @item.Deposit.ToString("C")
+                            </td>
+                        </tr>*@
+                    <tr>
+                        <td colspan="3">Total:</td>
+                        <td>
 
-
-        @*<tr>
-                <td>@item.ItemsHire.ProductName</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
-                <td>@item.Deposit.ToString("C")</td>
+                            @item.Total.ToString("C")
+                        </td>
+                    </tr>
 
 
-            </tr>*@
-    }
-  
-</table>
+
+                    @*<tr>
+                            <td>@item.ItemsHire.ProductName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.Total.ToString("C")</td>
+                            <td>@item.Deposit.ToString("C")</td>
+
+
+                        </tr>*@
+                }
+
+        </table>
+        </div>
+</body>
 
 
 

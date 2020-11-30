@@ -7,6 +7,14 @@
     ViewBag.Title = "CusBrowse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <head>
+
+
+        <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+        <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+    </head>
 <br />
 <br />
 <br />
@@ -14,7 +22,7 @@
 <br />
 <br />
 <br />
-<h2>Packages</h2>
+<h2 style="font-family:Roboto">Packages</h2>
 
 
 <font color="Black">
@@ -72,13 +80,13 @@
 
   
     <br />
-    <form asp-controller="Packages" asp-action="CusBrowse">
+    <form asp-controller="Packages" asp-action="CusBrowse" class="form-inline mx-auto search-form">
         <!--To change -->
 
 
         <p>You may search by Category</p>
-        <input type="text" name="SearchString" />
-        <input type="submit" value="Filter" />
+        <input class="form-control mr-sm-2" aria-label="SearchString" type="text" name="SearchString" />
+        <input class="btn btn-style my-2 my-sm-0" type="submit" value="Filter" />
 
 
 

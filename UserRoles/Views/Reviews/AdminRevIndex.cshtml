@@ -4,6 +4,14 @@
     ViewBag.Title = "AdminRevIndex";
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
+<head>
+
+
+    <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
 <br />
 <br />
 <br />
@@ -15,69 +23,75 @@
 <br />
 <br />
 
-<h2>Reviews</h2>
+<h2 style="font-family:Roboto">Reviews</h2>
 
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Rating)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.servRating)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.useService)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.recommend)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comment)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isActive)
-        </th>
-        <th></th>
-    </tr>
+    <body>
+        <div class="outer-w3-agile mt-3">
+            <h4 class="tittle-w3-agileits mb-4"></h4>
+            <table class="table table-bordered table-responsive">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Rating)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.servRating)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.useService)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.recommend)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Comment)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.Date)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.isActive)
+                        </th>
+                        <th></th>
+                    </tr>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.servRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.useService)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.recommend)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isActive)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
-                @*@Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CommentID })*@
-            </td>
-        </tr>
-    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Rating)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.servRating)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.useService)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.recommend)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Comment)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.isActive)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.CommentID }) |
+                                @*@Html.ActionLink("Details", "Details", new { id = item.CommentID }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.CommentID })*@
+                            </td>
+                        </tr>
+                    }
 
 
-</table>
+            </table>
+        </div>
+    </body>
 <div>
     <img src="@Url.Action("ChartPie")" alt="Chart" />
 
