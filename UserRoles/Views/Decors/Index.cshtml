@@ -8,97 +8,104 @@
 <br />
 <br />
 <br />
-<h2>Index</h2>
 <br />
-<form asp-controller="Decors" asp-action="Index">
-
-
-    <p>You may search by Decor Name</p>
-    <input type="text" name="SearchString" />
-    <input type="submit" value="Filter" />
-
-
-
+<br />
+<br />
+<br />
+<br />
+<form asp-controller="Decors" asp-action="Index" class="form-inline mx-auto search-form">
+    <input class="form-control mr-sm-2" type="text" name="SearchString" placeholder="Search" aria-label="SearchString" @*required=""*@>
+    <button class="btn btn-style my-2 my-sm-0" type="submit">Search</button>
 </form>
+
 <br />
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DecorName)
+<head>
 
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.Category_Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Image)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImageType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th></th>
-    </tr>
+    <!-- //Meta Tags -->
+    <!-- Style-sheets -->
+    <!-- Bootstrap Css -->
+    <link href="tables/css/bootstrap.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+    <!-- Bootstrap Css -->
+    <!-- Common Css -->
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+    <!--// Common Css -->
+    <!-- Nav Css -->
+    @*<link rel="stylesheet" href="/tables/css/style4.css">*@
+    <!--// Nav Css -->
+    <!-- Fontawesome Css -->
+    @*<link href="/tables/css/fontawesome-all.css" rel="stylesheet">*@
+    <!--// Fontawesome Css -->
+    <!--// Style-sheets -->
+    <!--web-fonts-->
+    @*<link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">*@
+    <!--//web-fonts-->
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DecorName)
+</head>
+<h2 style="font-family:Roboto">Index</h2>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.DecorName)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Category.Category_Name)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Description)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Price)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Image)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.ImageType)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.IsActive)</th>
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Category_Name)
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @try
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
+                    <tr>
+                        <th scope="row"> @item.DecorName</th>
+                        <td>  @item.Category.Category_Name</td>
+                        <td>  @item.Description</td>
+                        <td>  @item.Price</td>
+                        <td>
+                            @try
+                            {
 
-                    var base64 = Convert.ToBase64String(item.Image);
-                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                    <img src='@imgsrc' ("image1",new {id="Image" style="max-width:200px;max-height:200px" }) />
-                    @*<img src='@imgsrc' style="max-width:200px;max-height:200px" />*@
+                                var base64 = Convert.ToBase64String(item.Image);
+                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                <img src='@imgsrc' ("image1",new {id="Image" style="max-width:200px;max-height:200px" }) />
+                                @*<img src='@imgsrc' style="max-width:200px;max-height:200px" />*@
 
+
+                            }
+                            catch
+                            {
+                                if (item.Image == null)
+                                {
+                                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                }
+                            }
+                        </td>
+                        <td>  @item.ImageType</td>
+                        <td>  @item.IsActive</td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.DecorCode }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.DecorCode }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.DecorCode })
+                        </td>
+                    </tr>
 
                 }
-                catch
-                {
-                    if (item.Image == null)
-                    {
-                        <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
-                    }
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.DecorCode }) |
-                @Html.ActionLink("Details", "Details", new { id = item.DecorCode }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.DecorCode })
-            </td>
-        </tr>
-    }
+            </tbody>
+        </table>
 
-</table>
+
+    </div>
+</body>
+
