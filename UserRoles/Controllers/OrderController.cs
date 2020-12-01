@@ -56,7 +56,7 @@ namespace UserRoles.Controllers
         public ActionResult CusEvents(int? searchString, int? page)
         {
             var list = from u in db.BookEvents
-                       where u.Date > DateTime.Now
+                       where u.Date > DateTime.Now && u.CEmail == User.Identity.Name
                        orderby
                         u.ID ascending
                        select u;
@@ -382,44 +382,44 @@ namespace UserRoles.Controllers
 
         //Items Hire Order Methods
 
-        public ActionResult Collectnew(int? searchString, int? page)
-        {
-            var a = (from i in db.Maps
-                     join
-                     x in db.Orders on i.orderID equals x.OrderID
-                     where i.Distance == 0 && x.PickUp == false && x.Seen == false && x.DriverID == null
-                     orderby
-                    x.OrderID ascending
-                     select x);
+        //public ActionResult Collectnew(int? searchString, int? page)
+        //{
+        //    var a = (from i in db.Maps
+        //             join
+        //             x in db.Orders on i.orderID equals x.OrderID
+        //             where i.Distance == 0 && x.PickUp == false && x.Seen == false && x.DriverID == null
+        //             orderby
+        //            x.OrderID ascending
+        //             select x);
 
-            if (searchString != null)
-            {
-                a = (IOrderedQueryable<Order>)a.Where(s => s.OrderID == searchString);
-            }
+        //    if (searchString != null)
+        //    {
+        //        a = (IOrderedQueryable<Order>)a.Where(s => s.OrderID == searchString);
+        //    }
 
-            return View(a.ToList().ToPagedList(page ?? 1, 15));
-
-
-        }
-        public ActionResult DeliveryNew(int? searchString, int? page)
-        {
-            var a = (from i in db.Maps
-                     join
-                     x in db.Orders on i.orderID equals x.OrderID
-                     where i.Distance > 0 && x.PickUp == false && x.Seen == false && x.DriverID == null
-                     orderby
-                    x.OrderID ascending
-                     select x);
-
-            if (searchString != null)
-            {
-                a = (IOrderedQueryable<Order>)a.Where(s => s.OrderID == searchString);
-            }
-
-            return View(a.ToList().ToPagedList(page ?? 1, 15));
+        //    return View(a.ToList().ToPagedList(page ?? 1, 15));
 
 
-        }
+        //}
+        //public ActionResult DeliveryNew(int? searchString, int? page)
+        //{
+        //    var a = (from i in db.Maps
+        //             join
+        //             x in db.Orders on i.orderID equals x.OrderID
+        //             where i.Distance > 0 && x.PickUp == false && x.Seen == false && x.DriverID == null
+        //             orderby
+        //            x.OrderID ascending
+        //             select x);
+
+        //    if (searchString != null)
+        //    {
+        //        a = (IOrderedQueryable<Order>)a.Where(s => s.OrderID == searchString);
+        //    }
+
+        //    return View(a.ToList().ToPagedList(page ?? 1, 15));
+
+
+        //}
 
         public ActionResult CusIndex(int? searchString, int? page)
         {

@@ -68,10 +68,10 @@ namespace UserRoles.Models
         //[Required(ErrorMessage = "Collection date is required")]
         //[StringLength(70)]
         public DateTime CollDate { get; set; }
-        [Required(ErrorMessage ="Please enter your address")]
-        [Display(Name ="Address")]
-        [StringLength(255)]
-        public string Address { get; set; }
+        //[Required(ErrorMessage ="Please enter your address")]
+        //[Display(Name ="Address")]
+        //[StringLength(255)]
+        //public string Address { get; set; }
 
         [Display(Name ="Expected return date ")]
         public System.DateTime ExpectedReturnDate { get; set; }

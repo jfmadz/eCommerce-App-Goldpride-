@@ -162,7 +162,7 @@ namespace UserRoles.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DetailCapture([Bind(Include = "MySignature,CustomerName,Surname,CustomerPhone,Email,CollDate,OrderDate,PaymentType,ExpectedReturnDate,ReminderDate,Address")] Models.Order order)
+        public ActionResult DetailCapture([Bind(Include = "MySignature,CustomerName,Surname,CustomerPhone,Email,CollDate,OrderDate,PaymentType,ExpectedReturnDate,ReminderDate")] Models.Order order)
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
             ApplicationUser currentUser = UserManager.FindById(User.Identity.GetUserId());

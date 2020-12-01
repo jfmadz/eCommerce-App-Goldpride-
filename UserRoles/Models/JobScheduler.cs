@@ -22,9 +22,9 @@ namespace UserRoles.Models
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithDailyTimeIntervalSchedule
-                (s => s.WithIntervalInHours(24)
+                (s => s.WithIntervalInHours(5)
                 .OnEveryDay()
-                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(5, 00))
+                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(15, 45))
                 )
                 .Build();
             //ITrigger trigger = TriggerBuilder.Create()

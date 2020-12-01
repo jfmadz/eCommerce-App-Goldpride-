@@ -3041,6 +3041,7 @@ namespace UserRoles.Controllers
                             Body = " Good Day : " + item.Fname.ToUpper() + "\n" + ", Please find attached Reminder for your order with GoldPride: " + item.EventId,
                         };
                         msz.Attachments.Add(attachment);
+                        msz.Body = "Please take a moment of your time to review our services" + "https://2020grp26.azurewebsites.net/Reviews/Create";
 
                         client.Send(msz);
                     }
