@@ -1,0 +1,183 @@
+﻿@model UserRoles.Models.Review
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h1>Review </h1>
+        <hr />
+        <ul class="nav nav-pills">
+            <li class="active">
+                <a href="#tab_1" data-toggle="tab">Question 1</a>
+            </li>
+            <li>
+                <a href="#tab_2" data-toggle="tab">Question 2</a>
+            </li>
+            <li>
+                <a href="#tab_3" data-toggle="tab">Question 3</a>
+            </li>
+            <li>
+                <a href="#tab_4" data-toggle="tab">Question 4</a>
+            </li>
+            <li>
+                <a href="#tab_5" data-toggle="tab">Question 5</a>
+            </li>
+        </ul>
+        @*<hr />*@
+        <br />
+
+        <div @*style="background-color:lightgray;padding-right:50%"*@>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                    <div style="padding-left:8%">
+                        <h2>Please Review Product/Event</h2>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.Rating, "Excellent")
+                                <label>Excellent</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.Rating, "Good")
+                                <label>Good</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.Rating, "Poor")
+                                <label>Poor</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<br />*@
+
+
+                <div class="tab-pane active" id="tab_2">
+
+                    <div style="padding-left:8%">
+                        <h2>Please Rate Quality of Service</h2>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.servRating, "Excellent")
+                                <label>Excellent</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.servRating, "Good")
+                                <label>Good</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.servRating, "Poor")
+                                <label>Poor</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<br />*@
+
+                <div class="tab-pane active" id="tab_3">
+
+                    <div style="padding-left:8%">
+                        <h2>Would you use our services again?</h2>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.useService, "Yes")
+                                <label>Yes</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.useService, "No")
+                                <label>No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<br />*@
+
+                <div class="tab-pane active" id="tab_4">
+
+                    <div style="padding-left:8%">
+                        <h2>Would you recommend our services to others?</h2>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.recommend, "Yes")
+                                <label>Yes</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                @Html.RadioButtonFor(model => model.recommend, "No")
+                                <label>No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<br />*@
+
+                <div class="tab-pane active" id="tab_5">
+
+                    <div style="padding-left:8%">
+                        <h2>General Comments</h2>
+                        <br />
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div style="padding-left:10%">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                @*<div class="tab-pane active" id="tab_5">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>*@
+
+<br />
+
+<br />
+
+<br />
+<br />

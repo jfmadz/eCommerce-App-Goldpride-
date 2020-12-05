@@ -1,0 +1,205 @@
+﻿@model UserRoles.Models.Map
+
+@{
+    ViewBag.Title = "Create";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<style>
+    .flex-container {
+        display: flex;
+        /* background-color: DodgerBlue;*/
+    }
+
+        .flex-container > div {
+            /*background-color: #f1f1f1;*/
+            margin: 20px;
+            padding: 40px;
+            font-size: 10px;
+        }
+</style>
+@using (Html.BeginForm("Create", "Maps", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h1>Map</h1>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @*<div class="form-group">
+
+            @Html.LabelFor(model => model.Distance, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Distance, new { htmlAttributes = new { @class = "form-control" }  })
+                    @Html.ValidationMessageFor(model => model.Distance, "", new { @class = "text-danger" })
+                </div>
+        </div>*@
+    @*<input id="dvDistance" type="text" name="Distance" />*@
+<div class="flex-container">
+    @*<div class="form-group">*@
+
+
+    <h4>Cost for delivery</h4>
+    @Html.TextAreaFor(model => model.Distance, new { @id = "dvDistance", @readonly = "readonly" })
+
+<div class="col-md-offset-2 col-md-10 " style="padding-left:60%; background-size:70%">
+
+    <input type="submit"  value="Proceed" class="btn btn-success btn-block" />
+
+    <input type="submit" value="Skip Delivery" onclick="gfg_Run()" class="btn btn-warning btn-block" />
+</div>
+    @*</div>*@
+</div>
+            <div>
+                Travel From : <input id="travelfrom" type="text" name="name" value="7 Ritson Road Musgrave " readonly />
+                <br />
+                <br />
+
+                @*@Html.TextBoxFor(model => model.DelAddress, new { @id = "travelfrom" })*@
+                Destination : @Html.TextBoxFor(model => model.DelAddress, new { @id = "travelto" })
+                @*To : <input id="travelto" type="text" name="name" value=" " />*@
+                <br />
+                <br />
+
+                <input type="button" value="Get Route" onclick="GetRoute()" class="btn btn-primary" style=" background-color: #337ab7" />
+
+            </div>
+
+            @*<div id="dvDistance" >
+                </div>*@
+            @*<div>
+                <input type="" id="dvDistance" name="Distance" value="" class="Map" />
+                 </div>*@
+
+
+            @*<div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Proceed" class="btn btn-success" />
+                </div>*@
+        @*</div>*@
+        
+        <div id="dvMap" style="min-height:500px"></div>
+    </div>
+    }
+
+    @section scripts
+        {
+
+
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBoeZMWlTRYKryI4v99zC9TfqTqBgwGBME" type="text/javascript"></script>
+
+
+        <script>
+
+           
+
+            var source, destination;
+            var directionsDisplay;
+            var directionsService = new google.maps.DirectionsService();
+
+
+            var map = new google.maps.Map(document.getElementById('dvMap'), {
+                center: { lat: -29.857000, lng: 31.024790 },
+                zoom: 13,
+                mapTypeId: 'roadmap'
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: -29.851225, lng: 31.006136 },
+                map: map, //Map that we need to add
+                icon: 'https://img.icons8.com/fluent/48/000000/marker-storm.png',
+
+                draggarble: false
+            });
+            google.maps.event.addDomListener(window, 'load', function () {
+                new google.maps.places.SearchBox(document.getElementById('travelfrom'));
+                new google.maps.places.SearchBox(document.getElementById('travelto'));
+                directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': true });
+            });
+
+            function GetRoute() {
+
+                directionsDisplay.setMap(map);
+
+                source = document.getElementById("travelfrom").value;
+                destination = document.getElementById("travelto").value;
+
+                var request = {
+                    origin: source,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                directionsService.route(request, function (response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                    }
+                });
+
+                //*********DISTANCE AND DURATION**********************//
+                var service = new google.maps.DistanceMatrixService();
+                service.getDistanceMatrix({
+                    origins: [source],
+                    destinations: [destination],
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    unitSystem: false,
+                    avoidHighways: false,
+                    avoidTolls: false
+                }, function (response, status) {
+
+                    if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                        var distance = (response.rows[0].elements[0].distance.value / 1000 * 8).toFixed(2);
+                        var duration = response.rows[0].elements[0].duration.value;
+                        var dvDistance = document.getElementById("dvDistance");
+                        //var dvDuration = document.getElementById("dvDuration");
+                        duration = parseFloat(duration / 60).toFixed(2);
+                        dvDistance.innerHTML = "";
+                        dvDistance.innerHTML += distance;
+                        //dvDuration.innerHTML += "Time:" + duration + " min";
+
+                    } else {
+                        alert("Unable to find the distance via road.");
+                    }
+                });
+
+
+
+
+
+            }
+
+            function gfg_Run() {
+                dvDistance.value = 0;
+
+            }
+                //function product(distance) {
+                //    return distance;
+                //}
+                //document.getElementById()
+                //$(document).ready(function () {
+                //    $("#dvDistance").change(function () {
+                //        var distance = $('#dvDistance : selected').text();
+                //        getDistance(distance);
+                //        $("#hiddenStateId").val(distance);
+                //    });
+                //});
+
+                //$(function () {
+                //    $("#btnSubmit").click(function () {
+                //        $("#Distance").val(distance);
+                //    });
+                //});
+
+                //function SetHiddenValue(distance) {
+                //    $('#Distance').val(distance);
+                //}
+
+
+        </script>
+
+    }
+

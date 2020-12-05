@@ -1,0 +1,125 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserRoles.Models.BookEvent>
+@*@model IEnumerable<UserRoles.Models.BookEvent>*@
+
+@{
+    ViewBag.Title = "CusEvents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+
+
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 style="font-family:Roboto">Customer Events</h2>
+
+<form asp-controller="Order" asp-action="CusEvents" class="form-inline mx-auto search-form">
+
+
+    <p>You may search by Order ID</p>
+    <input class="form-control mr-sm-2" aria-label="SearchString" type="text" name="SearchString" />
+    <input  class="btn btn-style my-2 my-sm-0" type="submit" value="Filter" />
+
+
+
+</form>
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().ID)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().Location.Area)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().CEmail)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().FName)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().LName)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().Cell)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().Setup)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().Quantity)
+                        </th>
+                        <th scope="col">
+                            @Html.DisplayNameFor(model => model.First().Date)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location.Area)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cell)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Setup)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                            <td>
+
+                                @Html.ActionLink("Details", "EventDetails", new { id = item.ID }) |
+
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+        </div>
+</body>
+@Html.PagedListPager(Model, page => Url.Action("CusEvents", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+  new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

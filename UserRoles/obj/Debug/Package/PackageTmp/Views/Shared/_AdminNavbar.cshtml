@@ -1,0 +1,230 @@
+﻿
+
+
+<div style="position:fixed;top:0px;left:0px;width:0;height:0;" id="scrollzipPoint"></div>
+<!-- banner -->
+@*<div id="home" class="w3ls-banner">*@
+
+
+<!-- //banner -->
+<!-- header -->
+<div class="header-w3layouts">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Events</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="gp-logo">
+                    <img src="~/Content/images/GP_BLUE.jpg" alt="logo" />
+
+                    <h1><a class="navbar-brand" href="/Cal/Index">Gold Pride </a></h1>
+                </div>
+
+
+
+
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden"><a class="page-scroll" href="#page-top"></a>	</li>
+
+                    @*<li><a class="hvr-sweep-to-right" href="/Home/Index">Home</a></li>*@
+
+
+
+                    @*<li class="dropdown">
+            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Pages <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a class="hvr-sweep-to-right" href="/Home/Index">Home</a></li>
+
+
+                <li><a class="hvr-sweep-to-right" href="/Home/Contact">Contact</a></li>
+            </ul>
+        </li>
+
+        <li><a class="hvr-sweep-to-right" href="#">Gallery</a></li>
+        <li><a class="hvr-sweep-to-right" href="/Home/Contact">Contact</a></li>*@
+
+                    @*<li  class="hvr-sweep-to-right">@Html.ActionLink("Roles", "Index", "Role")</li>*@
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li><a class="hvr-sweep-to-right" href="/Cal/Index">Calendar</a></li>
+                        <li><a class="hvr-sweep-to-right" href="/Reviews/AdminRevIndex">Reviews</a></li>
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Meetings <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+
+
+
+
+                                <li><a class="hvr-sweep-to-right" href="/Meetings/Index">View Meetings</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Meetings/Create">New Meeting</a></li>
+                                @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                            </ul>
+
+
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Event <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+
+
+
+
+                                <li><a class="hvr-sweep-to-right" href="/Categories/Index">Event Category</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Locations/Index">Halls</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/NumberOfGuests/Index">Guest Quantity</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Packages/Index">Packages</a></li>
+                                @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                            </ul>
+
+
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Products <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+
+                                <li><a class="hvr-sweep-to-right" href="/ProductTypes/Index">Product Category</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/ItemsHires/Index">Products</a></li>
+
+
+
+
+
+                            </ul>
+
+
+                        </li>
+                        @*<li><a class="hvr-sweep-to-right" href="/ProductTypes/Index">Product Category</a></li>*@
+                        <li><a class="hvr-sweep-to-right" href="/Order/UpcomingEvents">UpComing Events</a></li>
+
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Orders <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+
+
+                                <li><a class="hvr-sweep-to-right" href="/Home/Camera">Scanner</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/AdminIndex">All Orders</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/Index">New Orders</a></li>
+                                @*<li><a class="hvr-sweep-to-right" href="/Order/AdminIndex">All Orders</a></li>
+        <li><a class="hvr-sweep-to-right" href="/Order/Collectnew">New Collection Orders</a></li>*@
+                                <li><a class="hvr-sweep-to-right" href="/Order/DeliveryNew">New Delivery Orders</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/Seen">Seen</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/CusToPickUp">Customer To Collect</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/CusToReturn">Customer To Return</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/DriverToDeliver">Driver To Deliver</a></li>
+                                <li><a class="hvr-sweep-to-right" href="/Order/DriverToCollect">Driver To Collect</a></li>
+
+
+
+
+                                @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                            </ul>
+
+
+                        </li>
+
+                        @*<li class="dropdown">
+                <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Create Categories <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a class="hvr-sweep-to-right" href="/Categories/Index">Event Category</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/Categories/Create">Create Event Category</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/Categories/Index">Event Category</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/ProductTypes/Create">Create a prodcut category</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/ProductTypes/Index">Product Category</a></li>
+
+
+
+                </ul>
+            </li>*@
+                        @*<li><a class="hvr-sweep-to-right" href="/Decors/Index">Gallery</a></li>*@
+                        @*<li class="dropdown">
+                <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Gallery <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a class="hvr-sweep-to-right" href="/Decors/DecorInventoryAdmin">Inventory</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/Decors/Index">Index</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/Decors/Create">Create</a></li>
+
+
+                </ul>
+            </li>*@
+                        @*<li><a class="hvr-sweep-to-right" href="/ItemsHires/Index">Items</a></li>*@
+                        @*<li class="dropdown">
+                <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Items <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a class="hvr-sweep-to-right" href="/ItemsHires/ItemsInventoryAdmin">Inventory</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/ItemsHires/Index">Index</a></li>
+                    <li><a class="hvr-sweep-to-right" href="/ItemsHires/Create">Create</a></li>
+
+
+                </ul>
+            </li>*@
+
+
+
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Role Management", "Index", "Account")</li>
+
+
+                    }
+
+                    @if (Request.IsAuthenticated && !User.IsInRole("Admin"))
+                    {
+
+                    }
+                    @if (Request.IsAuthenticated && User.IsInRole("Driver"))
+                    {
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Camera", "Camera", "Home")</li>
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Delivery", "DDelivery", "DriverVM")</li>
+                        <li class="hvr-sweep-to-right">@Html.ActionLink("Collection", "DCollection", "DriverVM")</li>
+
+
+                    }
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle hvr-sweep-to-right" data-hover="Pages" data-toggle="dropdown">Account <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+
+
+
+                            <li class="hvr-sweep-to-right ">@Html.Partial("_LoginPartial")</li>
+                            @*<li class="hvr-sweep-to-right">@Html.Partial("_LoginPartial") </li>*@
+
+
+                        </ul>
+
+
+                    </li>
+
+                </ul>
+
+                <ul></ul>
+
+
+            </div>
+
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+</div>
+<!-- //header -->

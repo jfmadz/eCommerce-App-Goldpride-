@@ -1,0 +1,104 @@
+﻿@using UserRoles.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Check out shopping cart</h2>
+
+@{
+    if (Session["Cart"] != null)
+    {
+        <table class="Shopping-cart">
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Sub Total</th>
+            </tr>
+
+            @foreach (var cart in (List<Cart>)Session["Cart"])
+            {
+                <tr>
+                    <td>@cart.ItemsHire.ProductName</td>
+                    <td>
+                        @try
+                        {
+
+                            var base64 = Convert.ToBase64String(cart.ItemsHire.Image);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                            <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                        }
+                        catch
+                        {
+                            if (cart.ItemsHire.Image == null)
+                            {
+                                <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                            }
+                        }
+                    </td>
+                    <td>@cart.ItemsHire.Price.ToString("C")</td>
+                    <td>
+                        <input type="text" name="quantity" id="quantity" value="@cart.Quantity" readonly />
+                    </td>
+                    <td>@((cart.Quantity * cart.ItemsHire.Price).ToString("C"))</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3">Deposit:</td>
+                <td>
+                    @{
+                        List<Cart> temp = (List<Cart>)Session["Cart"];
+                        var deposit = String.Format("{0:C}", temp.Sum(x => x.Quantity * x.ItemsHire.Price / 2))/* * (50/100)*/;
+
+                    }
+                    @deposit
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">Total:</td>
+                <td>
+                    @{
+
+                        var total = String.Format("{0:C}", temp.Sum(x => x.Quantity * x.ItemsHire.Price) + temp.Sum(x => x.Quantity * x.ItemsHire.Price / 2));
+                    }
+                    @total
+                </td>
+            </tr>
+        </table>
+
+        @*<a href='@Url.Action( "PaymentWithPaypal", "ShoppingCart")' class="btn btn-primary">Checkout with paypal</a>*@
+        <a href='@Url.Action( "OnceOff", "ShoppingCart")' class="btn btn-primary">Next</a>
+        @*@Html.ActionLink("Checkout with paypal", "PaymentWithPaypal", "ShoppingCart", null, new { @class = "continure-shopping" })*@
+    }
+    else
+    {
+        <h4>no item in your cart</h4>
+    }
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+  
+}
+
+<br />
+

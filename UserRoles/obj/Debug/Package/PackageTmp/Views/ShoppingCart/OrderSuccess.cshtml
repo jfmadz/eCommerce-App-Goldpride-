@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Order Success";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<head>
+   
+</head>
+<body onload="location.href='@Url.Action("ProcessOrderAsync", "ShoppingCart", null)'">
+    @using (Html.BeginForm("ProcessOrderAsync", "ShoppingCart", FormMethod.Post, new { id = "customer-form" }))
+    {
+        <p><h1>Thank you for choosing GoldPride</h1></p>
+        <p><h1>Your Order has been successful </h1></p>
+        <p> <h1>You will be redirected in a few, if not Please Click @Html.ActionLink("Here", "Index", "Home")to go back to the homepage</h1></p>
+        @*<div>
+                onload="location.href='@Url.Action("Process", "EventCart", null)"
+            </div>*@
+        @*<div> <input type="submit" value="Save" class="btn btn-danger btn-block" onclick="location.href='@Url.Action("Process", "EventCart", null)" /></div>*@
+    }
+    <div style="align-content:center"><img src="~/Content/images/GP_BLUE.jpg" /></div>
+</body>

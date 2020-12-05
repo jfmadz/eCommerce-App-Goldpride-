@@ -1,0 +1,284 @@
+﻿@model UserRoles.Models.Package
+@{
+    ViewBag.Title = "PackageDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    * {
+        box-sizing: border-box
+    }
+
+    /* Slideshow container */
+    .slideshow-container {
+        max-width: 300px;
+        position: relative;
+        margin: auto;
+    }
+
+    /* Hide the images by default */
+    .mySlides {
+        display: none;
+    }
+
+    /* Next & previous buttons */
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        margin-top: -22px;
+        padding: 16px;
+        color: deeppink;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover, .next:hover {
+            background-color: white;
+        }
+
+    /* Caption text */
+    .text {
+        color: #f2f2f2;
+        font-size: 15px;
+        padding: 8px 12px;
+        position: absolute;
+        bottom: 8px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+        color: #f2f2f2;
+        font-size: 12px;
+        padding: 8px 12px;
+        position: absolute;
+        top: 0;
+    }
+
+    /* The dots/bullets/indicators */
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+
+    /* Fading animation */
+    .fade {
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.5s;
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+
+    -webkit-keyframes fade {
+        from
+
+    {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+
+    }
+
+    keyframes fade {
+        from
+
+    {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+
+    }
+
+    .flex-container {
+        display: flex;
+        /* background-color: DodgerBlue;*/
+    }
+
+        .flex-container > div {
+            /*background-color: #f1f1f1;*/
+            /*margin: auto;*/
+            padding: 0px;
+            font-size: 15px;
+        }
+</style>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>PackageDetail</h2>
+<div class="flex-container">
+    <div>
+        <h4>Package</h4>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Category.Category_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Category.Category_Name)
+            </dd>
+            <br />
+            <dt>
+                @Html.DisplayNameFor(model => model.packageName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.packageName)
+            </dd>
+            <br />
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <br />
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.Raw(Model.Description)
+                @*@Html.DisplayFor(model => model.Description)*@
+            </dd>
+
+            <br />
+            <br />
+            <div style="padding-left:40%;">
+                <a href='@Url.Action("OrderNow", "EventCart", new { id = Model.PackageId })' onclick="location.href='@Url.Action("Process", "EventCart", null)" class="btn btn-primary"> Confirm Package</a>
+                <a href='@Url.Action("CusIndex", "Packages")' class="btn btn-primary"> Back</a>
+
+            </div>
+            @*<dt>
+                    @Html.DisplayNameFor(model => model.PackageImages)
+                </dt>*@
+    </div>
+    <div style="padding-left:20%;">
+        @foreach (var item in Model.PackageImages)
+        {
+            <div class="slideshow-container">
+
+                <!-- Full-width images with number and caption text -->
+                <div class="mySlides">
+                    <div class="numbertext">1 / 3</div>
+
+                    <img src="@Url.Content(( string.Format("data:image/jpg;base64,{0}",Convert.ToBase64String(item.Image))))" style="width:100%; border: 10px solid #555; border-radius:25px; -moz-box-shadow: 10px 10px 5px #ccc;-webkit-box-shadow: 10px 10px 5px #ccc; box-shadow: 10px 10px 5px #ccc; -moz-border-radius:25px;
+  -webkit-border-radius:25px;" />
+
+                </div>
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>
+
+            <!-- The dots/circles -->
+            <div style="text-align:center">
+                @*<span class="dot" onclick="currentSlide(1)"></span>*@
+
+            </div>
+            <!--<dd class="slideshow-container mySlides ">
+                <img src="@Url.Content(( string.Format("data:image/jpg;base64,{0}",Convert.ToBase64String(item.Image))))" style="width:100%" />
+
+            </dd>-->
+
+            @*<div class="text">Caption Text</div>*@
+
+            <!--<div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>-->
+
+
+        }
+    </div>
+</div>
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+@section scripts{
+
+    <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        // Next/previous controls
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Thumbnail image controls
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
+}

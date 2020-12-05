@@ -1,0 +1,99 @@
+﻿@model IEnumerable<UserRoles.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+@Html.ActionLink("Create Role", "Create", "Role")
+
+<head>
+
+   
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="css" media="all" />
+    
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" media="all" />
+   
+
+</head>
+<h2 style="font-family:Roboto">Role Management</h2>
+<form asp-controller="Account" asp-action="Index" class="form-inline mx-auto search-form">
+    <input class="form-control mr-sm-2" type="text" name="SearchString" placeholder="Search" aria-label="SearchString" @*required=""*@>
+    <button class="btn btn-style my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+
+<body>
+
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.Surname)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.Name)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+                    <th scope="col">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @Html.DisplayNameFor(model => model.UserName)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
+                    </th>
+
+
+                    <th></th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.Surname</th>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.Name</th>
+                        <th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; @item.UserName</th>
+
+
+                        <td>
+                            @Html.ActionLink("RegisterRole", "RegisterRole", new { id = item.Id }) |<br />
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |<br />
+                            @Html.ActionLink("Remove", "Remove", new { id = item.Id })
+
+
+                        </td>
+
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />

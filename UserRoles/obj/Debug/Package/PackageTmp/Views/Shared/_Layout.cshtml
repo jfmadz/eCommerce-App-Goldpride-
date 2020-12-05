@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>GOLD PRIDE</title>
+    <link rel="shortcut icon" type="image/svg" href="~/Content/images/GOLD PRIDE.jpg" />
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+
+    <link href="~/Content/css/font-awesome.css" rel="stylesheet">		<!-- font-awesome icons -->
+    <!-- //Custom Theme files -->
+    <!-- js -->
+    <script src="~/Content/js/jquery-2.2.3.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <!-- //js -->
+    <!-- web-fonts -->
+    <link href="//fonts.googleapis.com/css?family=Josefin+Sans:300,400,600,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!-- //web-fonts -->
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+    @Html.Partial("_NavBar")
+    <div class="container body-content">
+
+        @RenderBody()
+        <hr />
+        @*<footer>*@
+
+
+
+
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Content/js/jquery-2.2.3.min.js"></script>
+        <script src="~/Scripts/jquery-3.3.1.js"></script>
+
+        @*</footer>*@
+    </div>
+
+    <!-- footer-top -->
+    <div class="footer-top">
+        <div class="container">
+            <div class="col-md-3 foot-left">
+                <h3>About Us</h3>
+
+                <p>
+                    We help create and manage the event you envision without the stress
+                    and hassle of having to do everything yourself. No event is to large
+                    or small for us.
+                </p>
+            </div>
+            <div class="col-md-3 foot-left">
+                <h3>Get In Touch</h3>
+                <p>Feel free to contact us with whatever questoins you may have.</p>
+
+                <div class="contact-btm">
+                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                    <p>90 Street, City, State 34789.</p>
+                </div>
+                <div class="contact-btm">
+                    <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+
+                    <p>082 079 8501</p>
+                    <div class="contact-btm">
+                    </div>
+                    <span class="fa fa-envelope-o" aria-hidden="true"></span>
+                    <p> dalphene@gmail.com</p>
+                    <p>goldprideevents@gmail.com </p>
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="col-md-3 foot-left">
+                @*<h3>Latest Events</h3>*@
+                <ul>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><img src="~/Content/images/g1.jpg" alt="" class="img-responsive"></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><img src="~/Content/images/g2.jpg" alt="" class="img-responsive"></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><img src="~/Content/images/g3.jpg" alt="" class="img-responsive"></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><img src="~/Content/images/g4.jpg" alt="" class="img-responsive"></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+
+
+
+            <div class="col-md-3 foot-left">
+                @*<h3>Subscribe</h3>
+                        <p>Lorem Ipsum is simply dummy text of the printing and Lorem Ipsum has </p>
+                        <form action="#" method="post">
+                            <input type="email" Name="Enter Your Email" placeholder="Enter Your Email" required="">
+                            <input type="submit" value="Subscribe">
+                        </form>
+                    </div>*@
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- /footer-top -->
+
+        <br />
+
+
+        <!-- footer -->
+        <div class="copy-right">
+            <div class="container">
+                <div class="col-md-6 col-sm-6 col-xs-6 copy-right-grids">
+                    <div class="copy-left">
+                        @*<p>&copy; 2017 Events. All rights reserved | Design by <a href="http://w3layouts.com/">W3layouts</a></p>*@
+                        <p>| Proudly brought to you by <a href="http://codeTek.com/">codeTek</a></p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 top-middle">
+                    <ul>
+                        <li><a href="https://www.facebook.com/GoldPrideEvents/"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://www.instagram.com/goldpride_events/"><i class="fa fa-instagram"></i></a></li>
+                        @*<li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>*@
+                        @*<li><a href="#"><i class="fa fa-vimeo"></i></a></li>*@
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/js/jquery-2.2.3.min.js"></script>
+
+    <!-- skills -->
+
+    <script src="~/Content/js/responsiveslides.min.js"></script>
+    <script>
+        // You can also use "$(window).load(function() {"
+        $(function () {
+            // Slideshow 4
+            $("#slider4").responsiveSlides({
+                auto: true,
+                pager: true,
+                nav: false,
+                speed: 500,
+                namespace: "callbacks",
+                before: function () {
+                    $('.events').append("<li>before event fired.</li>");
+                },
+                after: function () {
+                    $('.events').append("<li>after event fired.</li>");
+                }
+            });
+
+        });
+    </script>
+    <script>
+        // You can also use "$(window).load(function() {"
+        $(function () {
+            // Slideshow 4
+            $("#slider3").responsiveSlides({
+                auto: true,
+                pager: false,
+                nav: true,
+                speed: 500,
+                namespace: "callbacks",
+                before: function () {
+                    $('.events').append("<li>before event fired.</li>");
+                },
+                after: function () {
+                    $('.events').append("<li>after event fired.</li>");
+                }
+            });
+
+        });
+    </script>
+
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/Scripts/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/jquery.validate.unobtrusive.min.js")
+
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5fa3e5d4613f1c78e60853c9/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+
+</body>
+</html>

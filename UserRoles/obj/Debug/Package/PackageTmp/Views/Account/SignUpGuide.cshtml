@@ -1,0 +1,40 @@
+﻿@model UserRoles.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+<h4><b>SignUp Helper.</b></h4>
+<hr />
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0) {
+        <div>
+            <h5><b>
+                
+                    In order to register please make sure you have access to the email address that you're about to use in order to confirm your account
+                </b>
+            </h5>
+            <br />
+           <b> <p>You will need to confirm your account in order to Login</p></b>
+            <br />
+            <h5>
+
+                <b>  Your Password will Require:<br /> - One Uppercase Letter<br /> - Minimum of 6 characters<br /> - And at least one digit</b>
+
+
+
+
+            </h5>
+        </div>
+    }
+    else {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders) {
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}

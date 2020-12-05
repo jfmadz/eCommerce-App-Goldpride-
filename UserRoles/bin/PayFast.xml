@@ -1,0 +1,467 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PayFast</name>
+    </assembly>
+    <members>
+        <member name="M:PayFast.Base.PayFastApiBase.Ping(System.String,System.Boolean)">
+            <summary>
+            Used to check if the API is responding to requests.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.Base.PayFastApiBase.Cancel(System.String,System.Boolean)">
+            <summary>
+            This will cancel a subscription entirely.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.Base.PayFastApiBase.GenerateSignature(System.Net.Http.HttpClient,System.Collections.Generic.KeyValuePair{System.String,System.String}[])">
+            <summary>
+            This method will generate the signature for the request
+            See <a href="https://www.payfast.co.za/documentation/api/#Merchant_Signature_Generation">PayFast API Signature Generation Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="T:PayFast.PayFastAdHoc">
+            <summary>
+            This class is intended to be used for adhoc payments
+            See <a href="https://www.payfast.co.za/documentation/ad-hoc-payments-api-endpoints/">PayFast Ad-Hoc Payments Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="M:PayFast.PayFastAdHoc.Fetch(System.String,System.Boolean)">
+            <summary>
+            Returns a JSON object containing the subscription details.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastAdHoc.Charge(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Charge an ad hoc subscription based on token.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="amount">Future recurring amount for the subscription. In ZAR and amount in cents and not X.XX</param>
+            <param name="item_name">The name of the item being charged for. (100 chars)</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastAdHoc.Charge(System.String,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Charge an ad hoc subscription based on token.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="amount">Future recurring amount for the subscription. In ZAR and amount in cents and not X.XX</param>
+            <param name="item_name">The name of the item being charged for. (100 chars)</param>
+            <param name="item_description">The description of the item being charged for.  (255 chars)</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastNotify.#ctor">
+            <summary>
+            This constructor does not allow for a argument
+            because it is intended to be called by the mvc model binder.
+            If a passphrase is being used, make a call to SetPassPhrase(string passPhrase)
+            on this class after it has been passed in by the model binder
+            See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return Variable Page Documentation</a> for more information.
+            See <a href="https://www.payfast.co.za/documentation/itn/">PayFast ITN Page Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.m_payment_id">
+            <summary>
+            Unique payment ID on the merchant’s system.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.pf_payment_id">
+            <summary>
+            Unique transaction ID on PayFast.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.payment_status">
+            <summary>
+            The status of the payment.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.item_name">
+            <summary>
+            The name of the item being charged for.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.item_description">
+            <summary>
+            The description of the item being charged for.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.amount_gross">
+            <summary>
+            The total amount which the payer paid.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.amount_fee">
+            <summary>
+            The total in fees which was deducated from the amount.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.amount_net">
+            <summary>
+            The net amount credited to the receiver’s account.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_str1">
+            <summary>
+            Number 1 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_str2">
+            <summary>
+            Number 2 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_str3">
+            <summary>
+            Number 3 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_str4">
+            <summary>
+            Number 4 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_str5">
+            <summary>
+            Number 5 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_int1">
+            <summary>
+            Number 1 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_int2">
+            <summary>
+            Number 2 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_int3">
+            <summary>
+            Number 3 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_int4">
+            <summary>
+            Number 4 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.custom_int5">
+            <summary>
+            Number 5 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.name_first">
+            <summary>
+            The buyer’s first name.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.name_last">
+            <summary>
+            The buyer’s last name.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.email_address">
+            <summary>
+            The buyer’s email address
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.merchant_id">
+            <summary>
+            The Merchant ID as given by the PayFast system. 
+            Used to uniquely identify the receiver’s account.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.token">
+            <summary>
+            Unique ID on PayFast that represents the subscription
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastNotify.billing_date">
+            <summary>
+            The date from which future subscription payments will be made.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:PayFast.PayFastNotify.signature" -->
+        <member name="M:PayFast.PayFastRequest.#ctor">
+            <summary>
+            This constructor is used when a passphrase is not setup or configured
+            See <a href="https://www.payfast.co.za/documentation/confirm-page/">PayFast Confirm Page Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="M:PayFast.PayFastRequest.#ctor(System.String)">
+            <summary>
+            This constructor is used when a passphrase has been configured
+            See <a href="https://www.payfast.co.za/documentation/confirm-page/">PayFast Confirm Page Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.merchant_id">
+            <summary>
+            The Merchant ID as given by the PayFast system. 
+            Used to uniquely identify the receiving account. 
+            This can be found on the merchant’s settings page.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.merchant_key">
+            <summary>
+            The Merchant Key as given by the PayFast system. 
+            Used to uniquely identify the receiving account. 
+            This provides an extra level of certainty concerning 
+            the correct account as both the ID and the Key must be 
+            correct in order for the transaction to proceed. 
+            This can be found on the merchant’s settings page.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.return_url">
+            <summary>
+            The URL where the user is returned to after 
+            payment has been successfully taken.
+            Default: PayFast homepage
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.cancel_url">
+            <summary>
+            The URL where the user should be redirected should 
+            they choose to cancel their payment while on the PayFast system.
+            Default: PayFast homepage
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.notify_url">
+            <summary>
+            The URL which is used by PayFast to post the Instant Transaction Notifications (ITNs) for this transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.name_first">
+            <summary>
+            The buyer’s first name.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.name_last">
+            <summary>
+            The buyer’s last name.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.email_address">
+            <summary>
+            The buyer’s email address
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.m_payment_id">
+            <summary>
+            Unique payment ID on the merchant’s system.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.amount">
+            <summary>
+            The amount which the payer must pay in ZAR.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.item_name">
+            <summary>
+            The name of the item being charged for.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.item_description">
+            <summary>
+            The description of the item being charged for.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_int1">
+            <summary>
+            Number 1 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_int2">
+            <summary>
+            Number 2 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_int3">
+            <summary>
+            Number 3 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_int4">
+            <summary>
+            Number 4 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_int5">
+            <summary>
+            Number 5 in a series of 5 custom integer variables (custom_int1, custom_int2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_str1">
+            <summary>
+            Number 1 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_str2">
+            <summary>
+            Number 2 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_str3">
+            <summary>
+            Number 3 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_str4">
+            <summary>
+            Number 4 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.custom_str5">
+            <summary>
+            Number 5 in a series of 5 custom string variables (custom_str1, custom_str2…) 
+            which can be used by the merchant as pass-through variables. 
+            They will be posted back to the merchant at the completion of the transaction.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.email_confirmation">
+            <summary>
+            Whether to send email confirmation to the merchant of the transaction. 
+            Email confirmation is automatically sent to the payer.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.confirmation_address">
+            <summary>
+            The address to send the confirmation email to.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.subscription_type">
+            <summary>
+            The subscription type sets the recurring billing type 
+            to either a  subscription or an ad hoc agreement.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.billing_date">
+            <summary>
+            The date from which future subscription payments will be made.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.recurring_amount">
+            <summary>
+            Future recurring amount for the subscription. 
+            Defaults to the ‘amount’ value if not set.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.frequency">
+            <summary>
+            The cycle period.
+            </summary>
+        </member>
+        <member name="P:PayFast.PayFastRequest.cycles">
+            <summary>
+            The number of payments/cycles that will occur for this subscription. Set to 0 for infinity.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:PayFast.PayFastRequest.signature" -->
+        <member name="M:PayFast.PayFastRequest.ToString">
+            <summary>
+            generates the query string as per the PayFast specifications.
+            PayFast also refers to this string as the GET string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:PayFast.PayFastSubscription">
+            <summary>
+            This class is intended to be used for subscriptions
+            See <a href="https://www.payfast.co.za/documentation/subscription-payments-api-endpoints/">PayFast Subscription Documentation</a> for more information.
+            </summary>
+        </member>
+        <member name="M:PayFast.PayFastSubscription.Fetch(System.String,System.Boolean)">
+            <summary>
+            Returns a JSON object containing the subscription details.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastSubscription.Pause(System.String,System.Boolean)">
+            <summary>
+            'Freeze' a subscription, for a duration of 1 cycle
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastSubscription.Pause(System.String,System.Int32,System.Boolean)">
+            <summary>
+            'Freeze' a subscription, for a duration indicated by the 'cycles' variable.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <param name="cycles">The number of payments/cycles that will occur for this subscription. Set to 0 for infinity.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastSubscription.UnPause(System.String,System.Boolean)">
+            <summary>
+            'Unfreeze' a subscription.
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+        <member name="M:PayFast.PayFastSubscription.Update(System.String,System.Nullable{System.Int32},System.Nullable{PayFast.BillingFrequency},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            This allows for multiple subscription values to be updated. If you do not wish to change a value, set the parameter to null, or do not pass in a value as it will default to null
+            </summary>
+            <param name="token">The token received from PayFast. See <a href="https://www.payfast.co.za/documentation/return-variables/">PayFast Return variables Documentation</a> for more information</param>
+            <param name="cycles">The number of payments/cycles that will occur for this subscription. Set to 0 for infinity.</param>
+            <param name="frequency">The cycle period.</param>
+            <param name="run_date">The date from which the cycle will be calculated</param>
+            <param name="amount">Future recurring amount for the subscription. In ZAR and amount in cents and not X.XX</param>
+            <param name="testing">Pass in true to test against the sandbox. This parameter, when true appends the required '?testing=true' value to the generated query string.</param>
+            <exception cref = "T:PayFast.Exceptions.ApiResponseException"> Thrown when the returned StatusCode != HttpStatusCode.OK (200)</exception>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,158 @@
+﻿@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<head>
+
+
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 style="font-family:Roboto">Order Details</h2>
+@*<p>@Html.ActionLink("Export Order Listing", "ExportingOrderListing")</p>
+    <p>@Html.ActionLink("Export Order", "DetailsReport")</p>*@
+<div>
+    <h4 style="font-family:Roboto">Order: @Html.DisplayFor(model => model.OrderID) </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PickUp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PickUp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CollDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CollDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualReturnDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualReturnDate)
+        </dd>
+
+    </dl>
+</div>
+
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Sub Total</th>
+                </tr>
+                @foreach (var item in Model.OrderDetail)
+                {
+                    <tr>
+                        <td>@item.ItemsHire.ProductName</td>
+
+                        <td>@item.ItemsHire.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@(( item.Quantity * item.ItemsHire.Price).ToString("C"))</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">Deposit:</td>
+                        <td>
+
+                            @item.Deposit.ToString("C")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Total:</td>
+                        <td>
+
+                            @item.Total.ToString("C")
+                        </td>
+                    </tr>
+
+
+
+                    @*<tr>
+                            <td>@item.ItemsHire.ProductName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.Total.ToString("C")</td>
+                            <td>@item.Deposit.ToString("C")</td>
+
+
+                        </tr>*@
+                }
+        </table>
+    </div>
+</body>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

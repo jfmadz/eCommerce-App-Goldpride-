@@ -1,0 +1,131 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserRoles.Models.ItemsHire>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+@{ UserRoles.Models.ApplicationDbContext db = new UserRoles.Models.ApplicationDbContext();}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<br />
+<form asp-controller="ItemsHires" asp-action="Index" class="form-inline mx-auto search-form">
+    <input class="form-control mr-sm-2" type="text" name="SearchString" placeholder="Search" aria-label="SearchString" @*required=""*@>
+    <button class="btn btn-style my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+<br />
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+<br />
+<head>
+
+    <!-- //Meta Tags -->
+    <!-- Style-sheets -->
+    <!-- Bootstrap Css -->
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="text" @*media="all"*@ />
+    <!-- Bootstrap Css -->
+    <!-- Common Css -->
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+    <!--// Common Css -->
+    <!-- Nav Css -->
+    @*<link rel="stylesheet" href="/tables/css/style4.css">*@
+    <!--// Nav Css -->
+    <!-- Fontawesome Css -->
+    @*<link href="/tables/css/fontawesome-all.css" rel="stylesheet">*@
+    <!--// Fontawesome Css -->
+    <!--// Style-sheets -->
+    <!--web-fonts-->
+    @*<link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">*@
+    <!--//web-fonts-->
+
+</head>
+<h2 style="font-family:Roboto">Items Hire</h2>
+@Html.ActionLink("Create New", "Create")
+
+<body>
+
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.First().ProductName)</th>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.First().ProductType.ProductCategory_Name)</th>
+                    <th scope="col">    @Html.DisplayNameFor(model => model.First().Description)</th>
+                    <th scope="col">     @Html.DisplayNameFor(model => model.First().Quantity)</th>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.First().Price)</th>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.First().Image)</th>
+                    <th></th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row"> @item.ProductName</th>
+                        <td>  @item.ProductType.ProductCategory_Name</td>
+                        <td>  @item.Description</td>
+                        <td>  @item.Quantity</td>
+                        <td>  @item.Price</td>
+                        <td>
+                            @try
+                            {
+
+                                var base64 = Convert.ToBase64String(item.Image);
+                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                            }
+                            catch
+                            {
+                                if (item.Image == null)
+                                {
+                                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }) |<br >
+                            @Html.ActionLink("Details", "Details", new { id = item.ProductID }) |<br>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+
+                        </td>
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

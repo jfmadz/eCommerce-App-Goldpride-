@@ -1,0 +1,267 @@
+﻿@model IEnumerable<UserRoles.Models.Decor>
+@{
+    ViewBag.Title = "DecorInentory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <font color="black">
+
+
+
+        <style>
+            .modal-dialog {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) !important;
+                display: inline-block;
+                text-align: left;
+                vertical-align: middle;
+            }
+
+            .modal-header, h4, .close {
+                font-size: 30px;
+            }
+
+            .modal-footer {
+                background-color: #f9f9f9;
+            }
+
+
+            .thumbnail {
+                padding: 0 0 15px 0;
+                border: none;
+                border-radius: 0;
+            }
+
+                .thumbnail p {
+                    margin-top: 15px;
+                    color: #555;
+                }
+
+
+            .btn {
+                padding: 10px 20px;
+                background-color: #333;
+                color: #f1f1f1;
+                border-radius: 0;
+                transition: .2s;
+            }
+
+
+                .btn:hover, .btn:focus {
+                    border: 1px solid #333;
+                    background-color: #fff;
+                    color: #000;
+                }
+        </style>
+
+        @{
+            ViewBag.Title = "DecorHire";
+        }
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <h2>Decor</h2>
+        <br />
+        <form asp-controller="Decors" asp-action="DecorInventory">
+
+
+            <p>You may search by Decor Name</p>
+            <input type="text" name="SearchString" />
+            <input type="submit" value="Filter" />
+
+
+
+        </form>
+        <br />
+        @*@using (Html.BeginForm("Decor", "Decors", FormMethod.Get))
+        {
+            <table align="center">
+                <tr>
+                    <td>
+                        <b> Product Name:</b>
+                    </td>
+                    <td>
+                        @Html.TextBox("PName", null, new { @class = "form-control" })
+                    </td>
+
+
+                    <td>
+                        <b> Filter:</b>
+
+                    </td>
+                    <td>
+                        @Html.DropDownList("Price", new List<SelectListItem>
+                    {
+                    new SelectListItem {Text = "Select an Option", Value = ""},
+                        new SelectListItem {Text = "Price - Highest to Lowest", Value = "New"},
+                         new SelectListItem {Text = "Price - Lowest to Highest", Value = "Old"},
+                    },
+                        new { @class = "form-control" })
+                    </td>
+
+                    <td>Products Category:</td>
+                        <td>
+                            @Html.DropDownList("PCategory", new List<SelectListItem>
+                        {
+                        new SelectListItem {Text = "Select an Option", Value = ""},
+                            new SelectListItem {Text = "Guitars", Value = "Cate1"},
+                             new SelectListItem {Text = "Pianos", Value = "Cate2"},
+                             new SelectListItem {Text = "", Value = "Cate3"},
+                             new SelectListItem {Text = "", Value = "Cate4"},
+                             new SelectListItem {Text = "", Value = "Cate5"},
+                        },
+                            new { @class = "form-control" })
+                        </td>
+                    <td>
+                                <input type="submit" value="Search" class="btn btn-primary btn-sm">  <input type="button" class="btn btn-primary btn-sm" value="Clear" onclick="location.href='@Url.Action("DecorInventory", "Decors")'" />
+                            </td>
+                        </tr>
+            </table>
+        }
+        <br>*@
+
+
+        @foreach (var item in Model)
+        {
+
+
+            <div class="col-md-4">
+
+
+                <div class="row">
+                    @try
+                    {
+
+                        var base64 = Convert.ToBase64String(item.Image);
+                        var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        <img src='@imgsrc' style="max-width:350px;max-height:400px" />
+
+
+                    }
+                    catch
+                    {
+                        if (item.Image == null)
+                        {
+                            <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                        }
+                    }
+                </div><br />
+                <div class="row">
+                    <h5 style="font-size:18px"><b><span id="servicename" style="color:black">Decor Name: @item.DecorName</span></b></h5>
+
+                </div><br />
+                <div class="row">
+                    <h5 style="font-size:18px"><b><span id="serviceprice" style="color:black">  Decor Price:  @item.Price.ToString("C")</span></b></h5>
+
+                </div><br />
+
+                @*<div class="row">
+                    <h6><span id="serviceprice" style="color:lightblue">Decor Quantity: @item.Quantity</span></h6>
+
+                </div>*@
+                <div class="row">
+                    <a class="btn btn-default" data-toggle="modal" data-target="#myModal-@(item.DecorCode)">More Information &raquo;</a>
+                </div>
+                <br>
+                @*<div class="row">
+                    <a class="btn btn-default" href="">Select Decor &raquo; </a>
+                </div>*@
+                <br>
+            </div>
+            <!-- Modal -->
+
+            <div id="myModal-@(item.DecorCode)" class="modal fade" role="dialog" data-backdrop="true">
+
+
+                <!-- Modal content-->
+                <div class="modal-dialog">
+                    <div id="modalheader" class="modal-content" style="margin-bottom: 20px">
+                        <div class="modal-header" style="padding:35px 50px;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4>@item.DecorName</h4>
+                        </div>
+                        <div class="modal-body" style="padding:40px 50px;">
+                            <div class="col-md-5">
+                                @try
+                                {
+
+                                    var base64 = Convert.ToBase64String(item.Image);
+                                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                    <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                                }
+                                catch
+                                {
+                                    if (item.Image == null)
+                                    {
+                                        <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                    }
+                                }
+
+                                @try
+                                {
+
+                                    var base64 = Convert.ToBase64String(item.Image);
+                                    var imgsrc = string.Format("data:image/jpg;base64,{0,1,2,3}", base64);
+                                    <img src='@imgsrc' style="max-width:500px;max-height:500px" />
+
+
+                                }
+                                catch
+                                {
+                                    if (item.Image == null)
+                                    {
+                                        <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                    }
+                                }
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+
+
+                            <div @*class="col-md-7 "*@ style=" float:left; font-weight:200;">
+                                <br />
+                                <b style="font-size:25px; font-weight:0 ;color:black ">Product Description : @item.Description</b>
+                                <br />
+                                <br />
+
+                                <b style="font-size:25px; font-weight:0;color:black">Price: @item.Price.ToString("C")</b>
+                                @*<p style="font-size:25px; font-weight:200">Product Quantity : @item.Quantity</p>*@
+                            </div>
+                        </div>
+
+                        <div style="margin-top:175px" class="modal-footer">
+                            @*<button type="button" class="btn btn-default" data-dismiss="modal">Select Product</button>*@
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        }
+
+        @if (Model.Count() == 0)
+        {
+            <div class="alert alert-dismissible alert-danger">
+                <button class="close" type="button" data-dismiss="alert">&times;</button>
+                <strong>Product Does Not Exist.Please enter a valid Product.</strong>
+            </div>
+        }
+
+    </font>

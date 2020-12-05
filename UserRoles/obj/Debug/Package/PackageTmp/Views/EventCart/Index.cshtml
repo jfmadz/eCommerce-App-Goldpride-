@@ -1,0 +1,151 @@
+﻿@using UserRoles.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .flex-container {
+        display: flex;
+        /* background-color: DodgerBlue;*/
+    }
+
+        .flex-container > div {
+            /*background-color: #f1f1f1;*/
+            margin: 20px;
+            padding: 40px;
+            font-size: 10px;
+        }
+</style>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2>Index</h2>
+<br />
+<br />
+@{
+    if (Session["Cart"] != null)
+    {
+        using (Html.BeginForm("UpdateCart", "EventCart", FormMethod.Post))
+        {
+            <body onload="location.href='@Url.Action("UpdateCart", "EventCart", null)">
+                <table class="Shopping-cart" onload="location.href='@Url.Action("UpdateCart", "EventCart", null)">
+                    <tr>
+                        <th>Package Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th> &nbsp;Image</th>
+                        <th>Price&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                        <th>Number of Guests</th>
+                        <th>Sub Total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    </tr>
+
+                    @foreach (var cart in (List<EventCart>)Session["Cart"])
+                    {
+                        <tr>
+                            <td>@cart.Package.packageName</td>
+                            <td>
+                                @try
+                                {
+
+                                    var base64 = Convert.ToBase64String(cart.Package.imagePack);
+                                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                    <img src='@imgsrc' style="max-width:200px;max-height:200px" />
+
+
+                                }
+                                catch
+                                {
+                                    if (cart.Package.imagePack == null)
+                                    {
+                                        <img width="40" height="40" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                    }
+                                }
+                            </td>
+                            <td>@cart.Package.Price.ToString("C")</td>
+                            <td>
+                                <input type="text" name="quantity" id="quantity" value="@cart.Quantity" readonly="readonly"/>
+
+                            </td>
+                            <td>@((cart.Quantity * cart.Package.Price).ToString("C"))</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4"> Deposit:</td>
+                        <td>
+                            @{
+                                List<EventCart> temp = (List<EventCart>)Session["Cart"];
+                                var deposit = String.Format("{0:C}", temp.Sum(x => x.Quantity * x.Package.Price / 3))/* * (50/100)*/;
+                                @*<br />
+                                <br />*@
+                               
+                            }
+                        <center > @deposit</center>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Total:</td>
+                        <td>
+                            @{
+
+                                var total = String.Format("{0:C}", temp.Sum(x => x.Quantity * x.Package.Price) + temp.Sum(x => x.Quantity * x.Package.Price / 3));
+                            }
+                            <center>@total </center>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+
+            <br />
+            @*@Html.ActionLink("Continue Shopping", "ItemsInventory", "ItemsHires", null, new { @class = "continure-shopping" })*@
+            @*<a href='@Url.Action( "ItemsInventory", "ItemsHires")' class="btn btn-primary">Continue Shopping</a>
+                <input type="submit" value="Update Cart" class="btn btn-primary" style="background-color: #337ab7" />*@
+            @*<a href='@Url.Action( "UpdateCart", "ShoppingCart")' type="submit" class="update-shopping">Update Cart</a>*@
+            @*@Html.ActionLink("Checkout", "Checkout", "ShoppingCart", null, new { @class = "continure-shopping" })*@
+
+            <a href='@Url.Action( "OnceOff", "EventCart")' class="btn btn-primary">Checkout with PayFast</a>
+           
+
+            <br />
+            <br />
+
+            @*@Html.ActionLink("Add Delivery", "Create", "Maps", null, new { @class = "continure-shopping" })*@
+
+
+
+
+
+
+        }
+    }
+    else
+    {
+        <h4>no item in your cart</h4>
+    }
+
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<script src="~/Content/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //called when key is pressed in texbox
+        $("#quantity").keypress(function (e) {
+            //if the letter is not a digitm we will display the error message and dont allow the user to type
+            id(e.which != 8 && e.which != 0 && (e.which < 40 || e.which > 57)); {
+                // display error message
+                $("errmsg").html("Enter digits only!").show().fadeOut("slow");
+                return false;
+            }
+        });
+    });
+</script>
+
+

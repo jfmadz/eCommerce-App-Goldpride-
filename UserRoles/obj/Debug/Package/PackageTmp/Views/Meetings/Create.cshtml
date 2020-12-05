@@ -1,0 +1,164 @@
+﻿@model UserRoles.Models.Meeting
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<!DOCTYPE html>
+<html>
+<head>
+    @*<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">*@
+
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shoelace-css/1.0.0-beta16/shoelace.css">*@
+    @*<link rel="stylesheet" href="/voice/styles.css">*@
+
+
+</head>
+
+
+<h2>Create</h2>
+@using (Html.BeginForm("Create", "Meetings", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+
+    <body>
+        <div class="container">
+
+            <div class="form-horizontal">
+                <h4>Meeting</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CategoryId, "Type of event", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Start, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Start, new { htmlAttributes = new { @type = "time" } })
+                        @Html.ValidationMessageFor(model => model.Start, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.End, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.End, new { htmlAttributes = new { @type = "time" } })
+                            @Html.ValidationMessageFor(model => model.End, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Attend, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Attend, new { htmlAttributes = new { @class = "form-control", @rows = "4", @cols = "130" } })
+                        @Html.ValidationMessageFor(model => model.Attend, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="app">
+                    @*<h3>Add New Note</h3>*@
+                    <div class="input-single">
+                        @Html.LabelFor(model => model.Discussion, new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextArea("Discussion", new
+                            {
+                                @class = "app",
+                                @id = "Discussion",
+                                @rows = "4",
+                                @cols = "130"
+                            })
+                            @Html.ValidationMessageFor(model => model.Discussion)
+                            <input type="button" value="Start" id="start-record-btn" />
+                            <input type="button" value="Pause" id="pause-record-btn" />
+                            <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
+                        </div>
+
+                        @*<button id="start-record-btn" title="Start Recording">Start Recognition</button>*@
+                        @*<button id="pause-record-btn" title="Pause Recording">Pause Recognition</button>*@
+                        @*<button id="save-note-btn" title="Save Note">Save Note</button>
+                            <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>*@
+
+                        @*<h3>My Notes</h3>
+                            <ul id="notes">
+                                <li>
+                                    <p class="no-notes">You don't have any notes.</p>
+                                </li>
+                            </ul>*@
+
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div></div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ckeditor, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextArea(@*model => model.Description*@"ckeditor", new { @class = "ckeditor", @id = "ckeditor", @rows = "200" })
+                        @Html.ValidationMessageFor(model => model.ckeditor)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            </div>
+    </body>
+
+}
+
+
+
+
+
+
+
+</html>
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/voice/script.js"></script>
+    <script src="~/ckeditors/ckeditor.js"></script>
+    <script src="~/ckeditors/adapters/jquery.js"></script>
+} 

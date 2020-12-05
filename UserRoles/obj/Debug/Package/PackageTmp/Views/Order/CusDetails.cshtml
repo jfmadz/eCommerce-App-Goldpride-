@@ -1,0 +1,305 @@
+﻿
+@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "CusDetails";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+@if (Request.IsAuthenticated && !User.IsInRole("Admin") || !User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Request.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<head>
+    <meta charset="utf-8">
+   
+
+    <style>
+    .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+    }
+
+
+        .flex-container > div {
+            /*background-color: #f1f1f1;*/
+            margin: 80px;
+            padding: 90px;
+            font-size: 10px;
+        }
+
+
+    .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+    }
+
+
+    .invoice-box table td {
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+    }
+
+
+          
+    .invoice-box table tr.top table td {
+        padding-bottom: 20px;
+    }
+
+
+    .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 45px;
+        color: #333;
+    }
+
+    .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+    }
+
+
+            }
+           
+   
+    .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+    }
+
+
+    .invoice-box table tr.details td {
+        padding-bottom: 20px;
+    }
+
+    .invoice-box table tr.item td{
+        border-bottom: 1px solid #eee;
+    }
+
+    .invoice-box table tr.item.last td {
+        border-bottom: none;
+    }
+
+
+         
+    .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+    }
+
+     .only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td {
+            width: 100%;
+            display: block;
+            text-align: center;
+        
+                                           }
+                                           }
+        
+
+        .invoice-box table tr.information table td {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+    }
+
+    /** RTL **/
+    .rtl {
+        direction: rtl;
+        font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+    }
+
+    .rtl table {
+        text-align: right;
+    }
+
+    .rtl table tr td:nth-child(2) {
+        text-align: left;
+    }
+    </style>
+</head>
+
+<body>
+    <h2>Customer Order Details</h2>
+    <br />
+    <div class="invoice-box">
+        <table cellpadding="0" cellspacing="0">
+            <tr class="top">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td class="title">
+                                <img src="~/Content/images/GP_BLUE.jpg" style="width:100%; height:100%; max-height:170px; max-width:200px;">
+                            </td>
+
+                            <td>
+                                Order #: @Model.OrderID <br>
+                                Created: @Model.OrderDate<br>
+                                Due: @Model.CollDate
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="heading">
+                <td>
+                    Company Information
+                </td>
+
+                <td>
+                    Contact Details
+                </td>
+            </tr>
+            <tr class="details">
+                <td>
+                    Gold Pride<br>
+                    90 street<br>
+                    Durban, SA, 4001
+                </td>
+                <td>
+                    (082) 0798501<br>
+                    dalphene@gmail.com
+                </td>
+            </tr>
+            @*<tr class="information">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td>
+                            GoldPride<br>
+                            12345 Sunny Road<br>
+                            Durban, KZN, 4001
+                        </td>
+
+                        <td>
+                            @Model.CustomerName + @Model.Surname<br>
+                            <br>
+                            john@example.com
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>*@
+
+
+            <tr class="heading">
+                <td>
+                    Customer Information
+                </td>
+
+                <td>
+                    Payment Method
+                </td>
+            </tr>
+
+            <tr class="details">
+                <td>
+                    @Model.CustomerName @Model.Surname<br />
+                    @Model.CustomerPhone<br />
+                    @Model.Email<br >
+                    @*@Model.Address*@
+                </td>
+
+                <td>
+                    @Model.PaymentType
+                </td>
+            </tr>
+
+            <tr class="heading">
+                <td>
+                    Item &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Quantity
+                </td>
+
+                <td>
+                    Price
+                </td>
+                @*<td>
+                Quantity
+            </td>*@
+            </tr>
+            @foreach (var item in Model.OrderDetail)
+            {
+                <tr class="item">
+                    <td>
+                        @item.ProductName &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@item.Quantity
+                    </td>
+                    <td>
+                        @item.Price.ToString("C")
+                    </td>
+                    @*<td>
+                    @item.Quantity
+                </td>*@
+                </tr>
+                <tr class="total">
+                    <td></td>
+
+                    <td>
+                        Total: @((item.Quantity * item.ItemsHire.Price).ToString("C"))
+                    </td>
+                </tr>
+            }
+
+
+
+
+
+        </table>
+    </div>
+</body>
+@if (Request.IsAuthenticated && User.IsInRole("Admin"))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID })
+
+
+    <br />
+    @Html.ActionLink("Back to List", "Index")
+
+} |
+
+@if (Request.IsAuthenticated && User.IsInRole("Driver"))
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID })
+
+
+    <br />
+    @Html.ActionLink("Back to List", "DCollection", "DriverVM")
+}
+
+
+
+@if (Request.IsAuthenticated && !User.IsInRole("Admin") && !User.IsInRole("Driver"))
+{
+    @Html.ActionLink("Back to List", "CusIndex")
+}
+</p>

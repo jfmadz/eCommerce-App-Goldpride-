@@ -1,0 +1,72 @@
+﻿@model IEnumerable<UserRoles.Models.Map>
+
+@{
+    ViewBag.Title = "Collection";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<head>
+
+    <!-- //Meta Tags -->
+    <!-- Style-sheets -->
+    <!-- Bootstrap Css -->
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="text" @*media="all"*@ />
+    <!-- Bootstrap Css -->
+    <!-- Common Css -->
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+    <!--// Common Css -->
+    <!-- Nav Css -->
+    @*<link rel="stylesheet" href="/tables/css/style4.css">*@
+    <!--// Nav Css -->
+    <!-- Fontawesome Css -->
+    @*<link href="/tables/css/fontawesome-all.css" rel="stylesheet">*@
+    <!--// Fontawesome Css -->
+    <!--// Style-sheets -->
+    <!--web-fonts-->
+    @*<link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">*@
+    <!--//web-fonts-->
+
+</head>
+<h2 style="font-family:Roboto">Collection</h2>
+<body>
+
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.DelAddress)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Email)</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row"> @item.DelAddress</th>
+                        <td>  @item.Email</td>
+
+
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+

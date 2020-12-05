@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Chart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chart</h2>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <div id="chartdiv" style="width: 600px; height: 350px;">
+    </div>
+</body>
+
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+
+    //Call function after Google Chart is loaded, it is required, otherwise you may get error
+    google.charts.setOnLoadCallback(DrawonLoad);
+
+
+    function DrawonLoad() {
+        $(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Home/GetPiechartJSON',
+                success: function (chartsdata) {
+                    // Callback that creates and populates a data table,
+                    // instantiates the pie chart, passes in the data and
+                    // draws it.
+
+                    //get JSONList from Object
+                    var Data = chartsdata.JSONList;
+                    var data = new google.visualization.DataTable();
+
+                    data.addColumn('string', 'CategoryName');
+                    data.addColumn('number', 'PostCount');
+
+                    /Loop through each list data
+                    for (var i = 0; i < Data.length; i++) {
+                        data.addRow([Data[i].CategoryName, Data[i].PostCount]);
+                    }
+
+                    // Instantiate and draw our chart, passing in some options
+                    var chart = new google.visualization.PieChart(document.getElementById('chartdiv'));
+
+                    //Draw pie chart command with data and chart options
+                    chart.draw(data,
+                        {
+                            title: "Google pie Chart in ASP.NET MVC",
+                            position: "top",
+                            fontsize: "14px",
+                        });
+
+                },
+                error: function () {
+                    alert("Error loading data! Please try again.");
+                }
+            });
+        })
+
+    }
+</script>

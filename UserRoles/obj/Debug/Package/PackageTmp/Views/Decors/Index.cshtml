@@ -1,0 +1,111 @@
+﻿@model IEnumerable<UserRoles.Models.Decor>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<form asp-controller="Decors" asp-action="Index" class="form-inline mx-auto search-form">
+    <input class="form-control mr-sm-2" type="text" name="SearchString" placeholder="Search" aria-label="SearchString" @*required=""*@>
+    <button class="btn btn-style my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+<br />
+<head>
+
+    <!-- //Meta Tags -->
+    <!-- Style-sheets -->
+    <!-- Bootstrap Css -->
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="text" @*media="all"*@ />
+    <!-- Bootstrap Css -->
+    <!-- Common Css -->
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+    <!--// Common Css -->
+    <!-- Nav Css -->
+    @*<link rel="stylesheet" href="/tables/css/style4.css">*@
+    <!--// Nav Css -->
+    <!-- Fontawesome Css -->
+    @*<link href="/tables/css/fontawesome-all.css" rel="stylesheet">*@
+    <!--// Fontawesome Css -->
+    <!--// Style-sheets -->
+    <!--web-fonts-->
+    @*<link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">*@
+    <!--//web-fonts-->
+
+</head>
+<h2 style="font-family:Roboto">Index</h2>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive ">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">  @Html.DisplayNameFor(model => model.DecorName)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Category.Category_Name)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Description)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Price)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.Image)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.ImageType)</th>
+                    <th scope="col"> @Html.DisplayNameFor(model => model.IsActive)</th>
+
+
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row"> @item.DecorName</th>
+                        <td>  @item.Category.Category_Name</td>
+                        <td>  @item.Description</td>
+                        <td>  @item.Price</td>
+                        <td>
+                            @try
+                            {
+
+                                var base64 = Convert.ToBase64String(item.Image);
+                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                <img src='@imgsrc' ("image1",new {id="Image" style="max-width:200px;max-height:200px" }) />
+                                @*<img src='@imgsrc' style="max-width:200px;max-height:200px" />*@
+
+
+                            }
+                            catch
+                            {
+                                if (item.Image == null)
+                                {
+                                    <img width="200" height="200" src="https://ixxidesign.azureedge.net/media/2388044/marcus-kraft-12-dont-worry-be-happy-white.jpg?mode=max&width=562&height=749" />
+                                }
+                            }
+                        </td>
+                        <td>  @item.ImageType</td>
+                        <td>  @item.IsActive</td>
+
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.DecorCode }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.DecorCode }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.DecorCode })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+
+
+    </div>
+</body>
+

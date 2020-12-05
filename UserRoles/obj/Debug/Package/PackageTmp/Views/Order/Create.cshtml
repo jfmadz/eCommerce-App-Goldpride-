@@ -1,0 +1,159 @@
+﻿@model UserRoles.Models.Order
+
+@{
+    ViewBag.Title = "Create";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+@using (Html.BeginForm("Create", "Order", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h1>Map</h1>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+
+                @Html.LabelFor(model => model.Distance, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Distance, new { htmlAttributes = new { @class = "form-control" }  })
+                        @Html.ValidationMessageFor(model => model.Distance, "", new { @class = "text-danger" })
+                    </div>
+            </div>*@
+        @*<input id="dvDistance" type="text" name="Distance" />*@
+
+        <div class="form-group">
+            @Html.TextAreaFor(model => model.Distance, new { @id = "dvDistance" })
+        </div>
+        <div>
+            Travel From : <input id="travelfrom" type="text" name="name" value=" " />
+            To : <input id="travelto" type="text" name="name" value=" " />
+            <input type="button" value="Get Route" onclick="GetRoute()" />
+
+        </div>
+        <div id="dvDistance">
+        </div>
+        @*<div>
+                <input type="" id="dvDistance" name="Distance" value="" class="Map" />
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+        <div id="dvMap" style="min-height:500px"></div>
+    </div>
+}
+
+@section scripts
+        {
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBoeZMWlTRYKryI4v99zC9TfqTqBgwGBME" type="text/javascript"></script>
+
+
+    <script>
+
+
+        var source, destination;
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+
+
+        var map = new google.maps.Map(document.getElementById('dvMap'), {
+            center: { lat: -29.857000, lng: 31.024790 },
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+
+        google.maps.event.addDomListener(window, 'load', function () {
+            new google.maps.places.SearchBox(document.getElementById('travelfrom'));
+            new google.maps.places.SearchBox(document.getElementById('travelto'));
+            directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': true });
+        });
+
+        function GetRoute() {
+
+            directionsDisplay.setMap(map);
+
+            source = document.getElementById("travelfrom").value;
+            destination = document.getElementById("travelto").value;
+
+            var request = {
+                origin: source,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+
+            //*********DISTANCE AND DURATION**********************//
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix({
+                origins: [source],
+                destinations: [destination],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: false,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+
+                if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                    var distance = (response.rows[0].elements[0].distance.value/1000 * 8).toFixed(2) ;
+                    var duration = response.rows[0].elements[0].duration.value;
+                    var dvDistance = document.getElementById("dvDistance");
+                    //var dvDuration = document.getElementById("dvDuration");
+                    duration = parseFloat(duration / 60).toFixed(2);
+                    dvDistance.innerHTML = "";
+                    dvDistance.innerHTML +=   distance ;
+                    //dvDuration.innerHTML += "Time:" + duration + " min";
+
+                } else {
+                    alert("Unable to find the distance via road.");
+                }
+            });
+
+
+
+
+
+        }
+        //function product(distance) {
+        //    return distance;
+        //}
+        //document.getElementById()
+        //$(document).ready(function () {
+        //    $("#dvDistance").change(function () {
+        //        var distance = $('#dvDistance : selected').text();
+        //        getDistance(distance);
+        //        $("#hiddenStateId").val(distance);
+        //    });
+        //});
+
+        //$(function () {
+        //    $("#btnSubmit").click(function () {
+        //        $("#Distance").val(distance);
+        //    });
+        //});
+
+        //function SetHiddenValue(distance) {
+        //    $('#Distance').val(distance);
+        //}
+
+
+    </script>
+
+}
+

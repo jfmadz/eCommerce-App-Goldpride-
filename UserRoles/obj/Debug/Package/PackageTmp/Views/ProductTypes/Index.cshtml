@@ -1,0 +1,82 @@
+﻿@model IEnumerable<UserRoles.Models.ProductType>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<head>
+
+
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="text" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 style="font-family:Roboto">Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.ProductCategory_Name)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Category_Description)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductCategory_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category_Description)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ProductCategoryId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.ProductCategoryId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ProductCategoryId })
+                        </td>
+                    </tr>
+                }
+
+        </table>
+    </div>
+</body>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+

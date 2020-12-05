@@ -1,0 +1,99 @@
+﻿@model UserRoles.Models.Meeting
+
+@{
+    ViewBag.Title = "Details";
+
+}
+@if (Request.IsAuthenticated && !User.IsInRole("Admin") || !User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Request.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Driver"))
+{
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<h2>Details</h2>
+
+<div>
+    <h4>Meeting</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Start)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Start)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.End)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.End)
+        </dd>
+        <br />
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Attend)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Attend)
+        </dd>
+        <br />
+        <dt>
+            @Html.DisplayNameFor(model => model.Discussion)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.Discussion)*@
+            @Html.Raw(Model.Discussion)
+
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ckeditor)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.Discussion)*@
+            @Html.Raw(Model.ckeditor)
+
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.messageID })
+    } |
+    @Html.ActionLink("Back to List", "Index")
+</p>

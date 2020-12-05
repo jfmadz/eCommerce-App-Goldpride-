@@ -1,0 +1,142 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<UserRoles.Models.OrderVM>
+
+@{
+    ViewBag.Title = "CusIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+
+
+    <link href="/tables/css/bootstrap.css" rel="stylesheet" type="css" @*media="all"*@ />
+
+    <link href="/tables/css/style.css" rel="stylesheet" type="text/css" @*media="all"*@ />
+
+</head>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<h2 style="font-family:Roboto">CusIndex</h2>
+
+
+<form asp-controller="OrderVM" asp-action="CusIndex" class="form-inline mx-auto search-form">
+
+
+    <p>You may search by Product Name</p>
+    <input class="form-control mr-sm-2" aria-label="SearchString" type="text" name="SearchString" />
+    <input class="btn btn-style my-2 my-sm-0" type="submit" value="Filter" />
+
+
+
+</form>
+<div> <input type="submit" value="Send Email" class="btn btn-danger btn-block" onclick="location.href='@Url.Action("CusIndex", "OrderVM",null)" /></div>
+
+<body>
+    <div class="outer-w3-agile mt-3">
+        <h4 class="tittle-w3-agileits mb-4"></h4>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().OrderID)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().ProductID)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().ProductName)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().Quantity)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().Price)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().Total)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().CustomerName)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().Surname)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().CustomerPhone)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().Email)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.First().CustomerAddress)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerPhone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerAddress)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
+                        </td>
+                    </tr>
+                }
+
+        </table>
+    </div>
+</body>
+@Html.PagedListPager(Model, page => Url.Action("CusIndex", new { page, searchString = Request.QueryString["searchString"], search = Request.QueryString["search"] }),
+  new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

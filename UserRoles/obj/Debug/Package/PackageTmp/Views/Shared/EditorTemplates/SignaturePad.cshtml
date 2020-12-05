@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "SignaturePad";
+   
+}
+
+<h2>SignaturePad</h2>
+
+@model byte[]
+
+<div class="signature-pad">
+    <canvas class="panel panel-default"></canvas>
+    <button type="button" class="btn btn-primary  btn-sm btn-clear-canvas">Clear</button>
+    @Html.HiddenFor(m => m, ViewData["htmlAttributes"])
+</div>
+
+
+@section Scripts {
+    <script src="~/Scripts/signature_pad.min.js"></script>
+    <script src="~/Scripts/SignaturePadInit.js"></script>
+}
+
