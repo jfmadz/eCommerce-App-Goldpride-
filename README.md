@@ -11,7 +11,7 @@ digital signatures
 
 #Admin(username: admin@gmail.com, password: Admin1)
 -View all meetings made by client
--start a new meeting and record minutes manually or via voive to text
+-start a new meeting and record minutes manually or via voice to text
 -add new halls/products/categories
 -add re add stock back by scanning qr of individual items
 -assign driver to deliveries
@@ -31,3 +31,5 @@ same as collection
 -review product when email has een received withg the link
 -have option for self collection or delivery
 -google maps is used to calculate distance if delivery is chosen and a price is output
+
+Find Screenshots of the application here- https://mega.nz/folder/IiRwmR7I#4iNWKDMIQg3yS8c1P89PLQ
