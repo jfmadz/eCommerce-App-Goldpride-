@@ -32,4 +32,4 @@ same as collection
 -have option for self collection or delivery
 -google maps is used to calculate distance if delivery is chosen and a price is output
 
-Find Screenshots of the application here- https://mega.nz/folder/IiRwmR7I#4iNWKDMIQg3yS8c1P89PLQ
+Find Screenshots of the application here- https://mega.nz/folder/dnY1RRyR#9hOzlVrT6h-dFvWTuaRa2w
